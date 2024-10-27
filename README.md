@@ -18,7 +18,7 @@ The project is organized into several main folders to maintain clarity and modul
 
 ### License
 
-This project is licensed under the **GNU Affero General Public License v3 (AGPL-3.0)**. For more information, refer to the [LICENSE](licensec/LICENSE.txt) file.
+This project is licensed under the **GNU Affero General Public License v3 (AGPL-3.0)**. For more information, refer to the [LICENSE](LICENSE) file.
 
 ### Author
 
