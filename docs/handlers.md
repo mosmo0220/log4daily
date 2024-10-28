@@ -18,3 +18,10 @@ struct Command {
 
     bool operator==(const Command& other) const; // Compares two Command objects for equality
 };
+```
+
+## Dependencies
+
+* vector: For dynamic arrays to store commands.
+* string: For string manipulation to handle command names and arguments.
+* algorithm: For using std::find to search for supported commands.

@@ -7,6 +7,8 @@
 #include <vector>
 #include <string>
 
+#include "localStorage.cpp"
+
 // Test suite for the consoleHandlers namespace
 TEST_SUITE("consoleHandlers") {
     TEST_CASE("parseConsoleInputs") {
@@ -56,5 +58,63 @@ TEST_SUITE("controlHandlers") {
         };
 
         CHECK_EQ(supportedCommands, expected);
+    }
+}
+
+// Test suite for the localStorage
+TEST_SUITE("localStorage") {
+    TEST_CASE("createLog4DailyFile") {
+        // Test input
+        std::string folderPath = DUMB_LOG4DAILY_FOLDER;
+        std::string configName = DUMB_CONFIG_FILE;
+        std::string name = "test_file";
+
+        LocalStorage localStorage(folderPath + configName);
+        bool result = localStorage.createLog4DailyFile(folderPath, name, configName);
+
+        // Expected output
+        CHECK_EQ(result, true);
+    }
+
+    TEST_CASE("openLog4DailyFile") {
+        // Test input
+        std::string folderPath = DUMB_LOG4DAILY_FOLDER;
+        std::string configName = DUMB_CONFIG_FILE;
+        std::string name = "test_file";
+
+        LocalStorage localStorage(folderPath + configName);
+        FileData fileData = localStorage.openLog4DailyFile(folderPath, name);
+        FileData expected = FileData();
+
+        // Expected output
+        CHECK_EQ(fileData, expected);
+    }
+
+    TEST_CASE("updateDataToFile") {
+        // Test input
+        std::string folderPath = DUMB_LOG4DAILY_FOLDER;
+        std::string configName = DUMB_CONFIG_FILE;
+        std::string name = "test_file";
+
+        LocalStorage localStorage(folderPath + configName);
+        FileData fileData = localStorage.openLog4DailyFile(folderPath, name);
+        fileData.log4FileName = "updated_test_file";
+        bool result = localStorage.updateDataToFile(folderPath, name, fileData);
+
+        // Expected output
+        CHECK_EQ(result, true);
+    }
+
+    TEST_CASE("deleteLog4DailyFile") {
+        // Test input
+        std::string folderPath = DUMB_LOG4DAILY_FOLDER;
+        std::string configName = DUMB_CONFIG_FILE;
+        std::string name = "test_file";
+
+        LocalStorage localStorage(folderPath + configName);
+        bool result = localStorage.deleteLog4DailyFile(folderPath, name, configName);
+
+        // Expected output
+        CHECK_EQ(result, true);
     }
 }

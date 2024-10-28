@@ -1,3 +1,34 @@
+/**
+ * @file handlers.cpp
+ * @brief This file contains functions for parsing and filtering console commands.
+ * 
+ * The file defines two namespaces: `consoleHandlers` and `controlHandlers`. 
+ * The `consoleHandlers` namespace includes a `Command` structure and a function to parse console inputs into a vector of `Command` structures.
+ * The `controlHandlers` namespace includes a function to filter a vector of `Command` structures for supported commands.
+ * 
+ * @namespace consoleHandlers
+ * The `consoleHandlers` namespace contains structures and functions for handling console commands.
+ * 
+ * @struct consoleHandlers::Command
+ * @brief Represents a console command with a name and an argument.
+ * 
+ * @fn consoleHandlers::parseConsoleInputs
+ * @brief Parses console inputs into a vector of `Command` structures.
+ * @param argc The number of command-line arguments.
+ * @param argv The array of command-line arguments.
+ * @return std::vector<consoleHandlers::Command> A vector of parsed `Command` structures.
+ * 
+ * @namespace controlHandlers
+ * The `controlHandlers` namespace contains functions for filtering console commands.
+ * 
+ * @var controlHandlers::supportedCommands
+ * @brief A vector of strings representing the supported commands.
+ * 
+ * @fn controlHandlers::filterForSupportedCommands
+ * @brief Filters a vector of `Command` structures for supported commands.
+ * @param commands The vector of `Command` structures to filter.
+ * @return std::vector<consoleHandlers::Command> A vector of `Command` structures containing only supported commands.
+ */
 #include <vector>
 #include <string>
 #include <algorithm>
