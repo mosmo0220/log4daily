@@ -9,8 +9,6 @@
 // For runThread enum
 #include "structures.cpp"
 
-using namespace ftxui;
-
 /**
  * @class main_thread
  * @brief Provides functionalities to manage the main thread of the log4daily application.
