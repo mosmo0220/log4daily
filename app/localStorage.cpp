@@ -271,7 +271,7 @@ public:
         if (!outFile.is_open()) {
             return false; // Failed to create the file
         }
-        nlohmann::json emptyData = FileDataToJson(FileData());
+        nlohmann::json emptyData = FileDataToJson(FileData({name, {}, {}, {}, {}}));
         outFile << emptyData.dump(4);
         outFile.close();
 

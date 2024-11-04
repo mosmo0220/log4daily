@@ -6,34 +6,43 @@
 #include "handlers.cpp"
 // For handling log4daily files
 #include "localStorage.cpp"
-// For runThread enum
-#include "structures.cpp"
+
+enum class CommandType {
+    NEW,
+    OPEN,
+    DELETE,
+    HELP,
+    UNSUPPORTED,
+    FAILED,
+    OTHER
+};
+
 
 /**
- * @class main_thread
+ * @class MainThread
  * @brief Provides functionalities to manage the main thread of the log4daily application.
  * 
- * The main_thread class provides functionalities to manage the main thread of the log4daily application.
+ * The MainThread class provides functionalities to manage the main thread of the log4daily application.
  * It handles the parsing of console inputs, filtering of supported commands, and execution of the commands.
  * The class also provides methods to show help messages and respond to user inputs.
  */
-class main_thread {
+class MainThread {
 public:
-    main_thread(std::string workingDirectory, std::string configPath) : localStorage(workingDirectory + configPath) {
+    MainThread(std::string workingDirectory, std::string configPath) : localStorage(workingDirectory + configPath) {
             this->workingDirectory = workingDirectory;
             this->configName = configPath;
         }
     
     /**
-     * @file main_thread.cpp
-     * @brief Implementation of the main_thread class for handling log4daily commands.
+     * @file MainThread.cpp
+     * @brief Implementation of the MainThread class for handling log4daily commands.
      * 
-     * This file contains the implementation of the main_thread class, which is responsible
+     * This file contains the implementation of the MainThread class, which is responsible
      * for processing and executing commands related to log4daily files. The class provides
      * methods to parse console inputs, filter supported commands, and execute commands such
      * as creating, opening, and deleting log4daily files.
      * 
-     * The main_thread class includes the following key methods:
+     * The MainThread class includes the following key methods:
      * - run: Parses and executes commands based on console inputs.
      * - ShowMessage: Displays a message based on the result of a command execution.
      * - getRespondMessage: Retrieves the response message after command execution.
@@ -45,8 +54,8 @@ public:
      * 
      * Usage:
      * @code
-     * main_thread mt("/path/to/working/directory", "config.cfg");
-     * runThread result = mt.run(argc, argv);
+     * MainThread mt("/path/to/working/directory", "config.cfg");
+     * CommandType result = mt.run(argc, argv);
      * mt.ShowMessage(result);
      * @endcode
      * 
@@ -57,7 +66,7 @@ public:
      * @see consoleHandlers
      * @see controlHandlers
     */
-    runThread run(int argc, char* argv[]) {
+    CommandType run(int argc, char* argv[]) {
         std::vector<consoleHandlers::Command> commands = consoleHandlers::parseConsoleInputs(argc, argv);
         std::vector<consoleHandlers::Command> supportedCommands = controlHandlers::filterForSupportedCommands(commands);
         
@@ -68,8 +77,7 @@ public:
         command_argument = supportedCommands.empty() ? "" : supportedCommands[0].argument;
 
         if (supportedCommands.empty()) {
-            std::cout << "No supported commands found." << std::endl;
-            return runThread::UNSUPPORTED;
+            return CommandType::UNSUPPORTED;
         }
 
         if (supportedCommands.size() > 1) {
@@ -84,16 +92,22 @@ public:
 
         if (command_name == "--open") {
             openedFile = localStorage.openLog4DailyFile(workingDirectory, command_argument);
-            return runThread::OPEN;
+            if (!(openedFile == FileData())) {
+                respondMessage = "Oppeing it now!";
+                return CommandType::OPEN;
+            } else {
+                respondMessage = "Failed to open log4daily file. (maybe it does not exist?)";
+                return CommandType::FAILED;
+            }
         } else if (command_name == "--new") {
             bool succesed = localStorage.createLog4DailyFile(workingDirectory, command_argument, configName);
             if (succesed) {
                 openedFile = localStorage.openLog4DailyFile(workingDirectory, command_argument);
                 respondMessage = "Oppeing it now!";
-                return runThread::NEW;
+                return CommandType::NEW;
             } else {
-                respondMessage = "Failed to create log4daily file.";
-                return runThread::FAILED;
+                respondMessage = "Failed to create log4daily file. (maybe it already exists?)";
+                return CommandType::FAILED;
             }
         } else if (command_name == "--delete") {
             std::cout << "Are you sure you want to delete the log4daily file? (y/n): ";
@@ -102,63 +116,63 @@ public:
 
             if (confirmation != "y" && confirmation != "Y") {
                 respondMessage = "Operation canceled.";
-                return runThread::OTHER;
+                return CommandType::OTHER;
             }
 
             bool succesed = localStorage.deleteLog4DailyFile(workingDirectory, command_argument, configName);
             if (succesed) {
-                return runThread::DELETE;
+                return CommandType::DELETE;
             } else {
                 respondMessage = "Failed to delete log4daily file.";
-                return runThread::FAILED;
+                return CommandType::FAILED;
             }
         } else if (command_name == "--help") {
             show_help();
-            return runThread::HELP;
+            return CommandType::HELP;
         } else {
             std::cout << "Unsupported command: " << commands[0].name << std::endl;
             std::cout << "Showing help instead." << std::endl;
             show_help();
-            return runThread::HELP;
+            return CommandType::HELP;
         }
 
         respondMessage = "Failed to execute command.";
-        return runThread::FAILED;
+        return CommandType::FAILED;
     }
 
     /**
      * @brief Displays a message based on the result of a command execution.
      * 
      * This function prints a message to the console depending on the result of a command
-     * executed by the `runThread` function. It provides feedback to the user about the
+     * executed by the `CommandType` function. It provides feedback to the user about the
      * success or failure of the command, as well as any additional messages passed to it.
      * 
-     * @param respond The result of the command execution, represented by the `runThread` enum.
+     * @param respond The result of the command execution, represented by the `CommandType` enum.
      * @param message An optional additional message to display. Defaults to an empty string.
     */
-    void ShowMessage(runThread respond, std::string message = "") {
+    void ShowMessage(CommandType respond, std::string message = "") {
         std::cout << std::endl;
         switch (respond)
         {
-            case runThread::NEW:
+            case CommandType::NEW:
                 std::cout << "New log4daily file created successfully." << std::endl;
                 break;
-            case runThread::OPEN:
+            case CommandType::OPEN:
                 std::cout << "Log4daily file opened successfully." << std::endl;
                 break;
-            case runThread::DELETE:
+            case CommandType::DELETE:
                 std::cout << "Log4daily file deleted successfully." << std::endl;
                 break;
-            case HELP:
+            case CommandType::HELP:
                 std::cout << "Help command executed." << std::endl;
                 break;
-            case runThread::UNSUPPORTED:
+            case CommandType::UNSUPPORTED:
                 std::cout << "No supported commands found." << std::endl;
                 break;
-            case runThread::FAILED:
+            case CommandType::FAILED:
                 std::cout << "Failed to execute command." << std::endl;
                 break;
-            case runThread::OTHER:
+            case CommandType::OTHER:
                 break;
             default:
                 std::cout << "Undefined application behavior." << std::endl;
