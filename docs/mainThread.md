@@ -1,26 +1,25 @@
 **MainThread**
 
-Plik: mainThread.cpp
+File: mainThread.cpp
 
-Opis: Klasa `MainThread` zarządza głównym wątkiem aplikacji log4daily. Obsługuje parsowanie danych wejściowych z konsoli, filtrowanie obsługiwanych komend i ich wykonywanie.
+Description: The `MainThread` class manages the main thread of the log4daily application. It handles parsing console input, filtering supported commands, and executing them.
 
-* Metody publiczne:
-    * `MainThread(std::string workingDirectory, std::string configPath)`: Konstruktor, który inicjalizuje `MainThread` z określonym katalogiem roboczym i ścieżką do pliku konfiguracyjnego.
-    * `CommandType run(int argc, char* argv[])`: Parsuje i wykonuje komendy z argumentów wiersza poleceń.
-    * `void showMessage(CommandType respond, std::string message = "")`: Wyświetla komunikat w konsoli na podstawie wyniku wykonania komendy.
-    * `std::string getRespondMessage()`: Zwraca komunikat odpowiedzi po wykonaniu komendy.
-    * `FileData getOpenedFile()`: Zwraca dane otwartego pliku log4daily.
+* Public methods:
+    * `MainThread(std::string workingDirectory, std::string configPath)`: Constructor that initializes `MainThread` with the specified working directory and configuration file path.
+    * `CommandType run(int argc, char* argv[])`: Parses and executes commands from command-line arguments.
+    * `void showMessage(CommandType respond, std::string message = "")`: Displays a message in the console based on the result of command execution.
+    * `std::string getRespondMessage()`: Returns the response message after command execution.
+    * `FileData getOpenedFile()`: Returns the data of the opened log4daily file.
 
-* Metody prywatne:
-    * `void showHelp()`: Wyświetla pomoc dla dostępnych komend.
+* Private methods:
+    * `void showHelp()`: Displays help for available commands.
 
-* Atrybuty:
-    * `localStorage`: Obiekt `LocalStorage` do zarządzania plikami log4daily.
-    * `workingDirectory`: Katalog roboczy aplikacji.
-    * `configName`: Nazwa pliku konfiguracyjnego.
-    * `openedFile`: Dane otwartego pliku log4daily.
-    * `respondMessage`: Komunikat odpowiedzi po wykonaniu komendy.
+* Attributes:
+    * `localStorage`: `LocalStorage` object to manage log4daily files.
+    * `workingDirectory`: Working directory of the application.
+    * `configName`: Name of the configuration file.
+    * `openedFile`: Data of the opened log4daily file.
+    * `respondMessage`: Response message after command execution.
 
-* Typ wyliczeniowy `CommandType`:
-    * Definiuje typy komend, które mogą być wykonane przez aplikację: `New`, `Open`, `Delete`, `Help`, `Unsupported`, `Failed`, `Other`.
-
+* Enum type `CommandType`:
+    * Defines the types of commands that can be executed by the application: `New`, `Open`, `Delete`, `Help`, `Unsupported`, `Failed`, `Other`.

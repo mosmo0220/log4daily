@@ -1,53 +1,53 @@
 **milestonesComponent**
 
-Plik: milestonesComponent.cpp
+File: milestonesComponent.cpp
 
-Opis: Funkcja `milestonesComponent` tworzy komponent "Milestones", który wyświetla listę kamieni milowych. 
+Description: The `milestonesComponent` function creates the "Milestones" component, which displays a list of milestones.
 
-* Zmienne globalne:
-    * `milestones`: Wektor nazw kamieni milowych.
-    * `selected_milestones`: Indeks aktualnie wybranego kamienia milowego.
+* Global variables:
+    * `milestones`: Vector of milestone names.
+    * `selected_milestones`: Index of the currently selected milestone.
 
-* Elementy interfejsu:
-    * Lista kamieni milowych z możliwością wyboru.
+* UI elements:
+    * List of milestones with the ability to select one.
 
 **diaryComponent**
 
-Plik: diaryComponent.cpp
+File: diaryComponent.cpp
 
-Opis: Funkcja `diaryComponent` tworzy komponent "Diary", który wyświetla wpisy do dziennika. 
+Description: The `diaryComponent` function creates the "Diary" component, which displays diary entries.
 
-* Zmienne globalne:
-    * `diary`: Wektor wpisów do dziennika.
-    * `selected_diary`: Indeks aktualnie wybranego wpisu.
+* Global variables:
+    * `diary`: Vector of diary entries.
+    * `selected_diary`: Index of the currently selected entry.
 
-* Elementy interfejsu:
-    * Lista wpisów do dziennika z możliwością wyboru.
+* UI elements:
+    * List of diary entries with the ability to select one.
 
 **aboutComponent**
 
-Plik: aboutComponent.cpp
+File: aboutComponent.cpp
 
-Opis: Funkcja `aboutComponent` tworzy komponent "About", który wyświetla informacje o aplikacji. 
+Description: The `aboutComponent` function creates the "About" component, which displays information about the application.
 
-* Zmienne globalne:
-    * `about`: Wektor informacji o aplikacji.
-    * `selected_about`: Indeks aktualnie wybranej informacji.
+* Global variables:
+    * `about`: Vector of information about the application.
+    * `selected_about`: Index of the currently selected information.
 
-* Elementy interfejsu:
-    * Lista informacji o aplikacji z możliwością wyboru.
+* UI elements:
+    * List of information about the application with the ability to select one.
 
 **createComponent**
 
-Plik: createComponent.cpp
+File: createComponent.cpp
 
-Opis: Funkcja `CreateComponent` tworzy generyczny komponent UI z listą elementów i etykietą. 
+Description: The `CreateComponent` function creates a generic UI component with a list of items and a label.
 
-* Argumenty:
-    * `entries`: Wektor ciągów znaków reprezentujących elementy listy.
-    * `selected`: Indeks aktualnie wybranego elementu.
-    * `content`: Etykieta komponentu.
+* Arguments:
+    * `entries`: Vector of strings representing the list items.
+    * `selected`: Index of the currently selected item.
+    * `content`: Label of the component.
 
-* Elementy interfejsu:
-    * Lista elementów z możliwością wyboru.
-    * Etykieta komponentu.
+* UI elements:
+    * List of items with the ability to select one.
+    * Label of the component.

@@ -1,48 +1,48 @@
 **LocalStorage**
 
-Plik: localStorage.cpp
+File: localStorage.cpp
 
-Opis: Klasa `LocalStorage` zapewnia funkcjonalności do zarządzania plikami log4daily. Przechowuje dane w formacie JSON i zarządza plikiem konfiguracyjnym, który przechowuje listę plików log4daily.
+Description: The `LocalStorage` class provides functionalities to manage log4daily files. It stores data in JSON format and manages the configuration file that stores the list of log4daily files.
 
-* Struktury danych:
-    * `Date`: Przechowuje datę i czas.
-    * `TodoData`: Przechowuje informacje o zadaniu do wykonania.
-    * `MilestoneProgressPoint`: Przechowuje informacje o punkcie kontrolnym w kamieniu milowym.
-    * `MilestonesData`: Przechowuje informacje o kamieniu milowym.
-    * `DiaryData`: Przechowuje wpis do dziennika.
-    * `FileData`: Przechowuje wszystkie dane w pliku log4daily.
+* Data structures:
+    * `Date`: Stores date and time.
+    * `TodoData`: Stores information about a to-do item.
+    * `MilestoneProgressPoint`: Stores information about a milestone progress point.
+    * `MilestonesData`: Stores information about a milestone.
+    * `DiaryData`: Stores a diary entry.
+    * `FileData`: Stores all data in a log4daily file.
 
-* Metody publiczne:
-    * `LocalStorage(const std::string& configPath)`: Konstruktor, który ładuje plik konfiguracyjny.
-    * `bool createLog4DailyFile(const std::string& folderPath, std::string& name, const std::string& configName)`: Tworzy nowy plik log4daily.
-    * `FileData openLog4DailyFile(const std::string& folderPath, std::string& name)`: Otwiera istniejący plik log4daily.
-    * `bool updateDataToFile(const std::string& folderPath, std::string& name, FileData& data)`: Aktualizuje dane w pliku log4daily.
-    * `bool deleteLog4DailyFile(const std::string& folderPath, std::string& name, const std::string& configName)`: Usuwa plik log4daily.
+* Public methods:
+    * `LocalStorage(const std::string& configPath)`: Constructor that loads the configuration file.
+    * `bool createLog4DailyFile(const std::string& folderPath, std::string& name, const std::string& configName)`: Creates a new log4daily file.
+    * `FileData openLog4DailyFile(const std::string& folderPath, std::string& name)`: Opens an existing log4daily file.
+    * `bool updateDataToFile(const std::string& folderPath, std::string& name, FileData& data)`: Updates data in a log4daily file.
+    * `bool deleteLog4DailyFile(const std::string& folderPath, std::string& name, const std::string& configName)`: Deletes a log4daily file.
 
-* Metody prywatne:
-    * `bool checkIfFileExists(const std::string& name)`: Sprawdza, czy plik istnieje.
-    * `bool saveConfig(const std::string& folderPath, const std::string& configName)`: Zapisuje plik konfiguracyjny.
-    * `bool addFileToConfig(std::string& name, const std::string& folderPath, const std::string& configName)`: Dodaje plik do pliku konfiguracyjnego.
-    * `bool removeFileFromConfig(std::string& name, const std::string& folderPath, const std::string& configName)`: Usuwa plik z pliku konfiguracyjnego.
-    * `nlohmann::json DateToJson(const Date& date)`: Konwertuje `Date` na JSON.
-    * `Date JsonToDate(const nlohmann::json& j)`: Konwertuje JSON na `Date`.
-    * `nlohmann::json TodoDataToJson(const TodoData& todo)`: Konwertuje `TodoData` na JSON.
-    * `TodoData JsonToTodoData(const nlohmann::json& j)`: Konwertuje JSON na `TodoData`.
-    * `nlohmann::json MilestoneProgressPointToJson(const MilestoneProgressPoint& point)`: Konwertuje `MilestoneProgressPoint` na JSON.
-    * `MilestoneProgressPoint JsonToMilestoneProgressPoint(const nlohmann::json& j)`: Konwertuje JSON na `MilestoneProgressPoint`.
-    * `nlohmann::json MilestonesDataToJson(const MilestonesData& milestone)`: Konwertuje `MilestonesData` na JSON.
-    * `MilestonesData JsonToMilestonesData(const nlohmann::json& j)`: Konwertuje JSON na `MilestonesData`.
-    * `nlohmann::json DiaryDataToJson(const DiaryData& diary)`: Konwertuje `DiaryData` na JSON.
-    * `DiaryData JsonToDiaryData(const nlohmann::json& j)`: Konwertuje JSON na `DiaryData`.
-    * `nlohmann::json FileDataToJson(const FileData& data)`: Konwertuje `FileData` na JSON.
-    * `FileData JsonToFileData(const nlohmann::json& j)`: Konwertuje JSON na `FileData`.
+* Private methods:
+    * `bool checkIfFileExists(const std::string& name)`: Checks if a file exists.
+    * `bool saveConfig(const std::string& folderPath, const std::string& configName)`: Saves the configuration file.
+    * `bool addFileToConfig(std::string& name, const std::string& folderPath, const std::string& configName)`: Adds a file to the configuration file.
+    * `bool removeFileFromConfig(std::string& name, const std::string& folderPath, const std::string& configName)`: Removes a file from the configuration file.
+    * `nlohmann::json DateToJson(const Date& date)`: Converts `Date` to JSON.
+    * `Date JsonToDate(const nlohmann::json& j)`: Converts JSON to `Date`.
+    * `nlohmann::json TodoDataToJson(const TodoData& todo)`: Converts `TodoData` to JSON.
+    * `TodoData JsonToTodoData(const nlohmann::json& j)`: Converts JSON to `TodoData`.
+    * `nlohmann::json MilestoneProgressPointToJson(const MilestoneProgressPoint& point)`: Converts `MilestoneProgressPoint` to JSON.
+    * `MilestoneProgressPoint JsonToMilestoneProgressPoint(const nlohmann::json& j)`: Converts JSON to `MilestoneProgressPoint`.
+    * `nlohmann::json MilestonesDataToJson(const MilestonesData& milestone)`: Converts `MilestonesData` to JSON.
+    * `MilestonesData JsonToMilestonesData(const nlohmann::json& j)`: Converts JSON to `MilestonesData`.
+    * `nlohmann::json DiaryDataToJson(const DiaryData& diary)`: Converts `DiaryData` to JSON.
+    * `DiaryData JsonToDiaryData(const nlohmann::json& j)`: Converts JSON to `DiaryData`.
+    * `nlohmann::json FileDataToJson(const FileData& data)`: Converts `FileData` to JSON.
+    * `FileData JsonToFileData(const nlohmann::json& j)`: Converts JSON to `FileData`.
 
-* Stałe:
-    * `DUMB_CONFIG_FILE`: Nazwa pliku konfiguracyjnego (tylko do testów).
-    * `DUMB_LOG4DAILY_FOLDER`: Ścieżka do folderu z plikami log4daily (tylko do testów).
+* Constants:
+    * `DUMB_CONFIG_FILE`: Name of the configuration file (for testing only).
+    * `DUMB_LOG4DAILY_FOLDER`: Path to the folder with log4daily files (for testing only).
 
-* Zależności:
-    * Biblioteka `nlohmann::json` do obsługi JSON.
-    * `fstream` do operacji wejścia/wyjścia plików.
-    * `vector` dla dynamicznych tablic.
-    * `string` do obsługi ciągów znaków.
+* Dependencies:
+    * `nlohmann::json` library for JSON handling.
+    * `fstream` for file input/output operations.
+    * `vector` for dynamic arrays.
+    * `string` for string manipulation.

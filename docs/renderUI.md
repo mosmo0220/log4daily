@@ -1,16 +1,16 @@
 **RenderUI**
 
-Plik: renderUI.cpp
+File: renderUI.cpp
 
-Opis: Klasa `RenderUI` odpowiada za renderowanie interfejsu użytkownika aplikacji log4daily.
+Description: The `RenderUI` class is responsible for rendering the user interface of the log4daily application.
 
-* Metody publiczne:
-    * `RenderUI(MainThread _mainThread)`: Konstruktor, który inicjalizuje `RenderUI` z obiektem `MainThread`.
-    * `Component createExitComponent(ScreenInteractive& screen, int& exitSelected)`: Tworzy komponent wyjścia z aplikacji z opcjami zapisu i wyjścia bez zapisu.
-    * `int renderUI()`: Renderuje komponenty UI i obsługuje interakcje użytkownika.
-    * `std::string getExitMessage()`: Zwraca komunikat o wyjściu z aplikacji (z lub bez zapisu).
+* Public methods:
+    * `RenderUI(MainThread _mainThread)`: Constructor that initializes `RenderUI` with a `MainThread` object.
+    * `Component createExitComponent(ScreenInteractive& screen, int& exitSelected)`: Creates an exit component with options to save and exit or exit without saving.
+    * `int renderUI()`: Renders UI components and handles user interaction.
+    * `std::string getExitMessage()`: Returns the exit message (with or without saving).
 
-* Atrybuty:
-    * `mainThread`: Obiekt `MainThread` do zarządzania głównym wątkiem aplikacji.
-    * `inUseFileData`: Dane pliku log4daily używane w UI.
-    * `exitedWithoutSaving`: Flaga wskazująca, czy użytkownik wyszedł z aplikacji bez zapisywania zmian.
+* Attributes:
+    * `mainThread`: `MainThread` object to manage the main application thread.
+    * `inUseFileData`: Log4daily file data used in the UI.
+    * `exitedWithoutSaving`: Flag indicating whether the user exited without saving changes.
