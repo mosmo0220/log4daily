@@ -8,15 +8,14 @@
 #include "localStorage.cpp"
 
 enum class CommandType {
-    NEW,
-    OPEN,
-    DELETE,
-    HELP,
-    UNSUPPORTED,
-    FAILED,
-    OTHER
+    New,
+    Open,
+    Delete,
+    Help,
+    Unsupported,
+    Failed,
+    Other
 };
-
 
 /**
  * @class MainThread
@@ -44,10 +43,10 @@ public:
      * 
      * The MainThread class includes the following key methods:
      * - run: Parses and executes commands based on console inputs.
-     * - ShowMessage: Displays a message based on the result of a command execution.
+     * - showMessage: Displays a message based on the result of a command execution.
      * - getRespondMessage: Retrieves the response message after command execution.
      * - getOpenedFile: Retrieves the opened log4daily file data.
-     * - show_help: Displays help information for available commands.
+     * - showHelp: Displays help information for available commands.
      * 
      * The class also maintains internal state such as the working directory, configuration
      * name, opened file data, and response message.
@@ -56,7 +55,7 @@ public:
      * @code
      * MainThread mt("/path/to/working/directory", "config.cfg");
      * CommandType result = mt.run(argc, argv);
-     * mt.ShowMessage(result);
+     * mt.showMessage(result);
      * @endcode
      * 
      * @note This class relies on external dependencies such as LocalStorage, consoleHandlers,
@@ -70,14 +69,14 @@ public:
         std::vector<consoleHandlers::Command> commands = consoleHandlers::parseConsoleInputs(argc, argv);
         std::vector<consoleHandlers::Command> supportedCommands = controlHandlers::filterForSupportedCommands(commands);
         
-        std::string command_name;
-        std::string command_argument;
+        std::string commandName;
+        std::string commandArgument;
 
-        command_name = supportedCommands.empty() ? "" : supportedCommands[0].name;
-        command_argument = supportedCommands.empty() ? "" : supportedCommands[0].argument;
+        commandName = supportedCommands.empty() ? "" : supportedCommands[0].name;
+        commandArgument = supportedCommands.empty() ? "" : supportedCommands[0].argument;
 
         if (supportedCommands.empty()) {
-            return CommandType::UNSUPPORTED;
+            return CommandType::Unsupported;
         }
 
         if (supportedCommands.size() > 1) {
@@ -86,58 +85,62 @@ public:
 
         if (supportedCommands[0].name != commands[0].name) {
             std::cout << "First supported command is different from first unfilted command." << std::endl;
-            command_name = commands[0].name;
-            command_argument = commands[0].argument;
+            commandName = commands[0].name;
+            commandArgument = commands[0].argument;
         }
 
-        if (command_name == "--open") {
-            openedFile = localStorage.openLog4DailyFile(workingDirectory, command_argument);
+        if (commandName == "--open") {
+            openedFile = localStorage.openLog4DailyFile(workingDirectory, commandArgument);
             if (!(openedFile == FileData())) {
-                respondMessage = "Oppeing it now!";
-                return CommandType::OPEN;
+                respondMessage = "Opening it now!";
+                return CommandType::Open;
             } else {
                 respondMessage = "Failed to open log4daily file. (maybe it does not exist?)";
-                return CommandType::FAILED;
+                return CommandType::Failed;
             }
-        } else if (command_name == "--new") {
-            bool succesed = localStorage.createLog4DailyFile(workingDirectory, command_argument, configName);
-            if (succesed) {
-                openedFile = localStorage.openLog4DailyFile(workingDirectory, command_argument);
-                respondMessage = "Oppeing it now!";
-                return CommandType::NEW;
+        } else if (commandName == "--new") {
+            bool succeeded = localStorage.createLog4DailyFile(workingDirectory, commandArgument, configName);
+            if (succeeded) {
+                openedFile = localStorage.openLog4DailyFile(workingDirectory, commandArgument);
+                respondMessage = "Opening it now!";
+                return CommandType::New;
             } else {
                 respondMessage = "Failed to create log4daily file. (maybe it already exists?)";
-                return CommandType::FAILED;
+                return CommandType::Failed;
             }
-        } else if (command_name == "--delete") {
+        } else if (commandName == "--delete") {
             std::cout << "Are you sure you want to delete the log4daily file? (y/n): ";
             std::string confirmation = "";
             std::cin >> confirmation;
 
             if (confirmation != "y" && confirmation != "Y") {
                 respondMessage = "Operation canceled.";
-                return CommandType::OTHER;
+                return CommandType::Other;
             }
 
-            bool succesed = localStorage.deleteLog4DailyFile(workingDirectory, command_argument, configName);
-            if (succesed) {
-                return CommandType::DELETE;
+            bool succeeded = localStorage.deleteLog4DailyFile(workingDirectory, commandArgument, configName);
+            if (succeeded) {
+                return CommandType::Delete;
             } else {
                 respondMessage = "Failed to delete log4daily file.";
-                return CommandType::FAILED;
+                return CommandType::Failed;
             }
-        } else if (command_name == "--help") {
-            show_help();
-            return CommandType::HELP;
+        } else if (commandName == "--help") {
+            showHelp();
+            return CommandType::Help;
         } else {
             std::cout << "Unsupported command: " << commands[0].name << std::endl;
             std::cout << "Showing help instead." << std::endl;
-            show_help();
-            return CommandType::HELP;
+            showHelp();
+            return CommandType::Help;
         }
 
         respondMessage = "Failed to execute command.";
-        return CommandType::FAILED;
+        return CommandType::Failed;
+    }
+
+    void updateFileData(FileData data) {
+        localStorage.updateDataToFile(workingDirectory, data.log4FileName, data);
     }
 
     /**
@@ -150,32 +153,31 @@ public:
      * @param respond The result of the command execution, represented by the `CommandType` enum.
      * @param message An optional additional message to display. Defaults to an empty string.
     */
-    void ShowMessage(CommandType respond, std::string message = "") {
-        std::cout << std::endl;
+    void showMessage(CommandType respond, std::string message = "") {
         switch (respond)
         {
-            case CommandType::NEW:
-                std::cout << "New log4daily file created successfully." << std::endl;
+            case CommandType::New:
+                std::cout << "New log4daily file created successfully. ";
                 break;
-            case CommandType::OPEN:
-                std::cout << "Log4daily file opened successfully." << std::endl;
+            case CommandType::Open:
+                std::cout << "Log4daily file opened successfully. ";
                 break;
-            case CommandType::DELETE:
-                std::cout << "Log4daily file deleted successfully." << std::endl;
+            case CommandType::Delete:
+                std::cout << "Log4daily file deleted successfully. ";
                 break;
-            case CommandType::HELP:
-                std::cout << "Help command executed." << std::endl;
+            case CommandType::Help:
+                std::cout << "Help command executed. ";
                 break;
-            case CommandType::UNSUPPORTED:
-                std::cout << "No supported commands found." << std::endl;
+            case CommandType::Unsupported:
+                std::cout << "No supported commands found. ";
                 break;
-            case CommandType::FAILED:
-                std::cout << "Failed to execute command." << std::endl;
+            case CommandType::Failed:
+                std::cout << "Failed to execute command. ";
                 break;
-            case CommandType::OTHER:
+            case CommandType::Other:
                 break;
             default:
-                std::cout << "Undefined application behavior." << std::endl;
+                std::cout << "Undefined application behavior. ";
         }
         if (!message.empty()) std::cout << message << std::endl;
     }
@@ -195,7 +197,7 @@ private:
     FileData openedFile = FileData();
     std::string respondMessage = "";
 
-    void show_help() {
+    void showHelp() {
         std::cout << "Usage: log4daily [command] [log4_file_name]" << std::endl;
         std::cout << "Commands:" << std::endl;
         std::cout << "  --new    [log4_file_name]    Create a new log4daily file" << std::endl;
