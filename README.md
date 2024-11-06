@@ -14,7 +14,7 @@ The project is organized into several main folders to maintain clarity and modul
 - **app**: The main directory containing source code and tests. Testing is performed using the **doctest** library to ensure code reliability and correctness.
 - **docs**: A dedicated folder for project documentation.
 - **include**: Contains essential libraries used within the application.
-- **licensec**: Directory containing licenses for external libraries.
+- **licenses**: Directory containing licenses for external libraries.
 
 ### License
 
