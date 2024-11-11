@@ -42,9 +42,6 @@
 #include <fstream>
 #include <json.hpp>
 
-const std::string DUMB_CONFIG_FILE = "log4daily_config.json"; // For tests only
-const std::string DUMB_LOG4DAILY_FOLDER = "./log4daily_files/"; // For tests only
-
 /**
  * @struct Date
  * @brief Represents a date and time.

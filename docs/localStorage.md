@@ -37,10 +37,6 @@ Description: The `LocalStorage` class provides functionalities to manage log4dai
     * `nlohmann::json FileDataToJson(const FileData& data)`: Converts `FileData` to JSON.
     * `FileData JsonToFileData(const nlohmann::json& j)`: Converts JSON to `FileData`.
 
-* Constants:
-    * `DUMB_CONFIG_FILE`: Name of the configuration file (for testing only).
-    * `DUMB_LOG4DAILY_FOLDER`: Path to the folder with log4daily files (for testing only).
-
 * Dependencies:
     * `nlohmann::json` library for JSON handling.
     * `fstream` for file input/output operations.

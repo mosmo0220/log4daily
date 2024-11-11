@@ -1,3 +1,4 @@
+#include "manageConfig.cpp"
 #include "mainThread.cpp"
 #include "renderUI.cpp"
 
@@ -12,7 +13,13 @@
  * @return int The exit code of the application.
  */
 int main(int argc, char** argv) {
-    MainThread mainThread("/home/zaruuwa/log4daily/log4daily/build/log4daily_files/", "log4daily_config.json");
+    std::string configRespond = manageConfig();
+    if (configRespond == "Problem acured while creating config folder" || configRespond == "Error!") {
+        std::cerr << configRespond << std::endl;
+        return 1;
+    }
+    
+    MainThread mainThread(configRespond + "/", configFileName);
     CommandType respond = mainThread.run(argc, argv);
     
     std::string message = mainThread.getRespondMessage().empty() ? "" : mainThread.getRespondMessage();
