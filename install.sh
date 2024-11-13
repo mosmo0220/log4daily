@@ -4,6 +4,13 @@
 mkdir -p build
 cd build
 
+# Check if cmake is installed
+if ! command -v cmake &> /dev/null
+then
+    echo "cmake could not be found, please install it first."
+    exit 1
+fi
+
 # Run cmake and compile the application
 cmake ..
 make
@@ -14,7 +21,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     sudo cp log4daily /usr/local/bin/
 elif [[ "$OSTYPE" == "cygwin" ]] || [[ "$OSTYPE" == "msys" ]]; then
-    cp log4daily.exe "C:/Program Files/log4daily/"
+    cp log4daily.exe "/c/Program Files/log4daily/"
 else
     echo "Unsupported OS"
     exit 1
@@ -25,7 +32,13 @@ if [[ "$OSTYPE" == "linux-gnu"* ]] || [[ "$OSTYPE" == "darwin"* ]]; then
     echo 'export PATH=$PATH:/usr/local/bin' >> ~/.bashrc
     source ~/.bashrc
 elif [[ "$OSTYPE" == "cygwin" ]] || [[ "$OSTYPE" == "msys" ]]; then
-    setx PATH "%PATH%;C:\Program Files\log4daily"
+    echo 'export PATH=$PATH:/c/Program Files/log4daily' >> ~/.bashrc
+    source ~/.bashrc
 fi
 
+# Clean up build directory
+cd ..
+rm -rf build
+
+# Installation complete
 echo "Installation complete."

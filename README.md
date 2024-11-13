@@ -36,8 +36,6 @@ To install **log4daily**, follow these steps:
 
 This script will make binary file, copy it to app folder and add to console path
 
-**Note**: At first use u must run app as root/sudo for creating configuration folder phase
-
 ### Update 🔄
 To update **log4daily** to the latest version, follow these steps:
 
@@ -60,13 +58,11 @@ This will update your local copy of **log4daily** with the latest changes and en
 
 ### Project Structure 🗂️
 
-The project is organized into several main folders to maintain clarity and modularity:
-
 📂 **app**: The main directory containing source code and tests. Testing is performed using the **doctest** library to ensure code reliability and correctness.
 
-📂 **docs**: A dedicated folder for project documentation.
-
 📂 **include**: Contains essential libraries used within the application.
+
+**Documentation.md**: Holds the application documentation
 
 ### License 📜
 
@@ -76,7 +72,6 @@ This project is licensed under the **GNU Affero General Public License v3 (AGPL-
 
 - [**FTXUI**](https://github.com/ArthurSonzogni/FTXUI) for UI : License MIT
 - [**nlohmann-json**](https://github.com/nlohmann/json) for json serialization : License MIT
-- [**doctest**](https://github.com/doctest/doctest) for tests : License MIT
 
 ### Author 👤
 

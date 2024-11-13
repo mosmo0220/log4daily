@@ -28,8 +28,12 @@ FetchContent_MakeAvailable(ftxui)
 # ------------------------------------------------------------------------------
 
 # Add the executable
-add_executable(log4daily ${PROJECT_SOURCE_DIR}/app/main.cpp)
-add_executable(tests ${PROJECT_SOURCE_DIR}/app/tests.cpp)
+add_executable(log4daily 
+    ${PROJECT_SOURCE_DIR}/app/handlers.cpp
+    ${PROJECT_SOURCE_DIR}/app/Storage/localStorage.cpp
+    ${PROJECT_SOURCE_DIR}/app/mainThread.cpp
+    ${PROJECT_SOURCE_DIR}/app/main.cpp
+)
 
 # Include directories
 include_directories(${PROJECT_SOURCE_DIR}/include)
@@ -39,14 +43,3 @@ target_link_libraries(log4daily
     PRIVATE ftxui::dom
     PRIVATE ftxui::component
 )
-
-target_link_libraries(tests
-    PRIVATE ftxui::screen
-    PRIVATE ftxui::dom
-    PRIVATE ftxui::component
-)
-
-# Link libraries (if any)
-# target_link_libraries(log4daily <library_name>)
-# Specify the C++ standard
-set(CMAKE_CXX_STANDARD_REQUIRED True)

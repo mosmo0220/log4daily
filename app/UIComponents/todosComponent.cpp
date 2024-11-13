@@ -2,6 +2,10 @@
 #include <string>
 #include <algorithm>
 #include <iostream>
+
+#include "../Storage/localStorage.h"
+#include "../mainThread.h"
+
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/component_base.hpp"
 #include "ftxui/dom/elements.hpp"
@@ -25,17 +29,68 @@ std::string dueHour;
 std::string dueMinute;
 
 /**
- * @brief Creates a limited input component.
+ * @brief Creates a limited range input component.
  * 
- * This function creates a limited input component that restricts the length of the input content.
- * The input content is limited to the specified maximum length, and any excess characters are truncated.
+ * This function creates a limited range input component for an integer value.
+ * The input component is limited to the specified range of values.
  */
-ftxui::Component limitedInput(std::string* content, const std::string& placeholder, int maxLength) {
+ftxui::Component limitedRangeInput(std::string* content, const std::string& placeholder, int minValue, int maxValue) {
+    auto input = ftxui::Input(content, placeholder);
+    
+    return ftxui::Renderer(input, [content, input, minValue, maxValue]() {
+        if (!content->empty()) {
+            try {
+                int value = std::stoi(*content);
+                if (value < minValue) {
+                    *content = std::to_string(minValue);
+                }
+                else if (value > maxValue) {
+                    *content = std::to_string(maxValue);
+                } 
+            } catch (const std::invalid_argument&) {
+                *content = std::to_string(minValue);
+            }
+        }
+        return input->Render();
+    });
+}
+
+/**
+ * @brief Creates a limited range input component for the day of the month.
+ * 
+ * This function creates a limited range input component for the day of the month.
+ * The input component is limited to the range of days in the specified month.
+ */
+ftxui::Component limitedRangeInputDay(std::string* content, const std::string& placeholder) {
     auto input = ftxui::Input(content, placeholder);
 
-    return ftxui::Renderer(input, [content, input, maxLength]() {
-        if (content->size() > static_cast<size_t>(maxLength)) {
-            content->resize(maxLength);
+    return ftxui::Renderer(input, [content, input]() {
+        if (!content->empty()) {
+            int minValue = 1;
+            int maxValue = 31;
+
+            try {
+                int month = std::stoi(dueMonth);
+                if (month == 2) {
+                    int year = std::stoi(dueYear);
+                    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+                        maxValue = 29;
+                    } else {
+                        maxValue = 28;
+                    }
+                } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+                    maxValue = 30;
+                }
+                int value = std::stoi(*content);
+                if (value < minValue) {
+                    *content = std::to_string(minValue);
+                }
+                else if (value > maxValue) {
+                    *content = std::to_string(maxValue);
+                } 
+            } catch (const std::invalid_argument&) {
+                *content = std::to_string(minValue);
+            }
         }
         return input->Render();
     });
@@ -129,15 +184,15 @@ ftxui::Component todosComponent(FileData *data) {
 
     dueYear = std::to_string(tm.tm_year + 1900);
     dueMonth = std::to_string(tm.tm_mon + 1);
-    dueDay = std::to_string(tm.tm_mday);
+    dueDay = std::to_string(tm.tm_mday + 1);
     dueHour = std::to_string(tm.tm_hour);
     dueMinute = std::to_string(tm.tm_min);
 
-    auto inputDueYear = limitedInput(&dueYear, "Year", 4) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 5);
-    auto inputDueMonth = limitedInput(&dueMonth, "Month", 2) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 3);
-    auto inputDueDay = limitedInput(&dueDay, "Day", 2) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 3);
-    auto inputDueHour = limitedInput(&dueHour, "Hour", 2) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 3);
-    auto inputDueMinute = limitedInput(&dueMinute, "Minute", 2) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 3);
+    auto inputDueYear = limitedRangeInput(&dueYear, "Year", 1900, 2100) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 5);
+    auto inputDueMonth = limitedRangeInput(&dueMonth, "Month", 1, 12) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 3);
+    auto inputDueDay = limitedRangeInputDay(&dueDay, "Day") | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 3);
+    auto inputDueHour = limitedRangeInput(&dueHour, "Hour", 0, 23) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 3);
+    auto inputDueMinute = limitedRangeInput(&dueMinute, "Minute", 1, 60) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 3);
 
     auto dueDateInputs = ftxui::Container::Horizontal({
         inputDueYear,
@@ -158,6 +213,7 @@ ftxui::Component todosComponent(FileData *data) {
                 todos.todos.push_back(newTodoName);
                 todos.todosIds.push_back(newId);
                 newTodoName.clear();
+                newTodoDescription.clear();
             } catch (const std::bad_alloc& e) {
                 std::cerr << "Memory allocation failed: " << e.what() << std::endl;
             }
@@ -204,11 +260,32 @@ ftxui::Component todosComponent(FileData *data) {
             return ftxui::text("Due Date: No Todo selected");
         }
         const auto& todo = data->todosData[selectedTodos];
+
+        int month = todo.dueDate.month;
+        std::string monthText = std::to_string(month);
+        int day = todo.dueDate.day;
+        std::string dayText = std::to_string(day);
+        int hour = todo.dueDate.hour;
+        std::string hourText = std::to_string(hour);
+        int minute = todo.dueDate.minute;
+        std::string minuteText = std::to_string(minute);
+
+        if (month <= 9) {
+            monthText = "0" + monthText;
+        }
+        if (day <= 9) {
+            dayText = "0" + dayText;
+        }
+        if (hour <= 9) {
+            hourText = "0" + hourText;
+        }
+        if (minute <= 9) {
+            minuteText = "0" + minuteText;
+        }
+
         std::string dateText = "Due Date: " + std::to_string(todo.dueDate.year) + "-" +
-                                std::to_string(todo.dueDate.month) + "-" +
-                                std::to_string(todo.dueDate.day) + " " +
-                                std::to_string(todo.dueDate.hour) + ":" +
-                                std::to_string(todo.dueDate.minute);
+                                monthText + "-" + dayText + " " +
+                                hourText + ":" + minuteText;
         return ftxui::text(dateText);
     });
 

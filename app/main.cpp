@@ -1,5 +1,5 @@
-#include "manageConfig.cpp"
-#include "mainThread.cpp"
+#include "./Storage/manageConfig.cpp"
+#include "mainThread.h"
 #include "renderUI.cpp"
 
 /**

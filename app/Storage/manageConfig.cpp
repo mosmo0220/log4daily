@@ -28,7 +28,13 @@ std::string getConfigFolderPath() {
 #elif __APPLE__
     configPath = "/Library/Application Support/log4daily";
 #else
-    configPath = "/etc/log4daily";
+    const char* homeDir = getenv("HOME");
+    if (homeDir != nullptr) {
+        configPath = std::string(homeDir) + "/.log4daily";
+    } else {
+        std::cerr << "Error getting user home directory" << std::endl;
+        exit(1);
+    }
 #endif
 
     return configPath;
@@ -40,13 +46,13 @@ enum class ConfigFolderStatus {
     ERROR
 };
 
+/**
+ * @brief Creates the configuration folder.
+ * 
+ * This function creates the configuration folder for the log4daily application.
+ */
 ConfigFolderStatus createConfigFolder(const std::string& path) {
     struct stat info;
-
-    if (geteuid() != 0 && stat(path.c_str(), &info) != 0) {
-        std::cout << "This application must be run as root/sudo at configuration folder creation!" << std::endl;
-        return ConfigFolderStatus::ERROR;
-    }
 
     if (stat(path.c_str(), &info) != 0) {
         if (MKDIR(path.c_str()) == 0) {
@@ -63,6 +69,14 @@ ConfigFolderStatus createConfigFolder(const std::string& path) {
     }
 }
 
+/**
+ * @brief Manages the configuration for the log4daily application.
+ * 
+ * This function manages the configuration for the log4daily application by creating the configuration folder
+ * and configuration file if they do not already exist.
+ * 
+ * @return std::string The path to the configuration folder.
+ */
 std::string manageConfig() {
     std::string configPath = getConfigFolderPath();
     ConfigFolderStatus status = createConfigFolder(configPath);

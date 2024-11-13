@@ -2,12 +2,19 @@
 #include <string>
 #include <vector>
 #include <functional>
+
+// Log4daily components
+#include "./Storage/localStorage.h"
+#include "mainThread.h"
+
+// FTXUI components
 #include "ftxui/component/captured_mouse.hpp"
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/component_base.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/dom/elements.hpp"
 
+// UI components
 #include "UIComponents/createComponent.cpp"
 #include "UIComponents/todosComponent.cpp"
 #include "UIComponents/milestonesComponent.cpp"
