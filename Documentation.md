@@ -46,15 +46,3 @@ Run the executable (`./log4daily`) with these optional command-line arguments:
 * `--open [filename]` : Opens an existing log file.
 * `--delete [filename]` : Deletes a log file.
 * `--help` : Displays help information and usage instructions.
-
-## Dependencies
-
-* **FTXUI:** A modern C++ library for building terminal-based user interfaces.  Installation instructions can be found at [FTXUI GitHub Repository](https://github.com/ArthurSonzogni/FTXUI).
-* **JSON:** A library for parsing and serializing JSON data.  This may be included with your C++ compiler or can be obtained from a reputable source like [nlohmann/json](https://github.com/nlohmann/json).
-
-## Build Instructions
-
-1. **Clone the repository:** `git clone https://github.com/your-username/Log4Daily.git`
-2. **Install FTXUI:** Follow the instructions in the FTXUI repository to install the library and its dependencies.
-3. **Install JSON library (if necessary):**  Follow instructions for your chosen JSON library.
-4. **Compile the code:** Use a C++ compiler (e.g., g++) to compile the source files.  A Makefile may be provided for simplified compilation.  Example: `g++ -o log4daily main.cpp mainThread.cpp renderUI.cpp localStorage.cpp manageConfig.cpp todosComponent.cpp handlers.cpp -lftxui -lnlohmann_json` (adjust libraries as needed)
