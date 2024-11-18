@@ -1,3 +1,5 @@
+#include "todosComponent.h"
+
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -12,21 +14,9 @@
 
 using namespace ftxui;
 
-struct TodosListData {
-    std::vector<std::string> todos;
-    std::vector<int> todosIds;
-};
-
-TodosListData todos;
-int selectedTodos = 0;
-std::string newTodoName;
-std::string newTodoDescription;
-
-std::string dueYear;
-std::string dueMonth;
-std::string dueDay;
-std::string dueHour;
-std::string dueMinute;
+TodosComponent::TodosComponent() {
+    selectedTodos = 0;
+}
 
 /**
  * @brief Creates a limited range input component.
@@ -34,7 +24,7 @@ std::string dueMinute;
  * This function creates a limited range input component for an integer value.
  * The input component is limited to the specified range of values.
  */
-ftxui::Component limitedRangeInput(std::string* content, const std::string& placeholder, int minValue, int maxValue) {
+ftxui::Component TodosComponent::limitedRangeInput(std::string* content, const std::string& placeholder, int minValue, int maxValue) {
     auto input = ftxui::Input(content, placeholder);
     
     return ftxui::Renderer(input, [content, input, minValue, maxValue]() {
@@ -61,18 +51,18 @@ ftxui::Component limitedRangeInput(std::string* content, const std::string& plac
  * This function creates a limited range input component for the day of the month.
  * The input component is limited to the range of days in the specified month.
  */
-ftxui::Component limitedRangeInputDay(std::string* content, const std::string& placeholder) {
+ftxui::Component TodosComponent::limitedRangeInputDay(std::string* content, const std::string& placeholder) {
     auto input = ftxui::Input(content, placeholder);
 
-    return ftxui::Renderer(input, [content, input]() {
+    return ftxui::Renderer(input, [content, input, this]() {
         if (!content->empty()) {
             int minValue = 1;
             int maxValue = 31;
 
             try {
-                int month = std::stoi(dueMonth);
+                int month = std::stoi(this->dueMonth);
                 if (month == 2) {
-                    int year = std::stoi(dueYear);
+                    int year = std::stoi(this->dueYear);
                     if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
                         maxValue = 29;
                     } else {
@@ -103,7 +93,7 @@ ftxui::Component limitedRangeInputDay(std::string* content, const std::string& p
  * The new todo item is created with the specified name, description, and due date.
  * The function returns the ID of the newly created todo item.
  */
-int addTodo(FileData *data, std::string newTodoName, std::string newTodoDescription, Date dueDate) {
+int TodosComponent::addTodo(FileData *data, Date dueDate) {
     TodoData newTodo;
     
     newTodo.id = data->todosData.size() + 1;
@@ -122,8 +112,8 @@ int addTodo(FileData *data, std::string newTodoName, std::string newTodoDescript
 
     newTodo.dueDate = dueDate;
 
-    newTodo.todoName = newTodoName;
-    newTodo.todoDescription = newTodoDescription;
+    newTodo.todoName = this->newTodoName;
+    newTodo.todoDescription = this->newTodoDescription;
 
     data->todosData.push_back(newTodo);
     return newTodo.id;
@@ -135,7 +125,7 @@ int addTodo(FileData *data, std::string newTodoName, std::string newTodoDescript
  * This function removes a todo item from the list of todos.
  * The todo item with the specified ID is removed from the list.
  */
-void removeTodo(FileData *data, int id) {
+void TodosComponent::removeTodo(FileData *data, int id) {
     auto it = std::remove_if(data->todosData.begin(), data->todosData.end(), [id](const TodoData& todo) {
         return todo.id == id;
     });
@@ -149,7 +139,7 @@ void removeTodo(FileData *data, int id) {
  * The todo item with the specified ID is marked as done if the done parameter is true,
  * and marked as undone if the done parameter is false.
  */
-void markTodoDone(FileData *data, int id, bool done) {
+void TodosComponent::markTodoDone(FileData *data, int id, bool done) {
     for (auto& todo : data->todosData) {
         if (todo.id == id) {
             if (done) {
@@ -168,7 +158,12 @@ void markTodoDone(FileData *data, int id, bool done) {
  * This function creates the todos component, which displays the list of todos and allows the user to interact with them.
  * The component includes options to add new todos, remove existing todos, and mark todos as done.
  */
-ftxui::Component todosComponent(FileData *data) {
+ftxui::Component TodosComponent::renderTodosComponent(FileData *data) {
+    if (!data) return ftxui::Renderer([] { return ftxui::text("Error: Data is null"); });
+
+    todos.todos.clear();
+    todos.todosIds.clear();
+
     for (const auto& todo : data->todosData) {
         todos.todos.push_back(todo.todoName);
         todos.todosIds.push_back(todo.id);
@@ -182,11 +177,11 @@ ftxui::Component todosComponent(FileData *data) {
     auto t = std::time(nullptr);
     auto tm = *std::localtime(&t);
 
-    dueYear = std::to_string(tm.tm_year + 1900);
-    dueMonth = std::to_string(tm.tm_mon + 1);
-    dueDay = std::to_string(tm.tm_mday + 1);
-    dueHour = std::to_string(tm.tm_hour);
-    dueMinute = std::to_string(tm.tm_min);
+    this->dueYear = std::to_string(tm.tm_year + 1900);
+    this->dueMonth = std::to_string(tm.tm_mon + 1);
+    this->dueDay = std::to_string(tm.tm_mday + 1);
+    this->dueHour = std::to_string(tm.tm_hour);
+    this->dueMinute = std::to_string(tm.tm_min);
 
     auto inputDueYear = limitedRangeInput(&dueYear, "Year", 1900, 2100) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 5);
     auto inputDueMonth = limitedRangeInput(&dueMonth, "Month", 1, 12) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 3);
@@ -206,10 +201,10 @@ ftxui::Component todosComponent(FileData *data) {
         inputDueMinute,
     });
 
-    auto addButton = ftxui::Button("Add Todo", [data] {
+    auto addButton = ftxui::Button("Add Todo", [data, this] {
         if (!newTodoName.empty()) {
             try {
-                int newId = addTodo(data, newTodoName, newTodoDescription, {static_cast<short>(std::stoi(dueDay)), static_cast<short>(std::stoi(dueMonth)), static_cast<short>(std::stoi(dueYear)), static_cast<short>(std::stoi(dueHour)), static_cast<short>(std::stoi(dueMinute)), 0});
+                int newId = addTodo(data, {static_cast<short>(std::stoi(dueDay)), static_cast<short>(std::stoi(dueMonth)), static_cast<short>(std::stoi(dueYear)), static_cast<short>(std::stoi(dueHour)), static_cast<short>(std::stoi(dueMinute)), 0});
                 todos.todos.push_back(newTodoName);
                 todos.todosIds.push_back(newId);
                 newTodoName.clear();
@@ -220,17 +215,17 @@ ftxui::Component todosComponent(FileData *data) {
         }
     }) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 20);
 
-    auto removeButton = ftxui::Button("Remove Todo", [data] {
+    auto removeButton = ftxui::Button("Remove Todo", [data, this] {
         if (!todos.todos.empty() && selectedTodos < static_cast<int>(todos.todos.size())) {
             int idToRemove = todos.todosIds[selectedTodos];
             todos.todos.erase(todos.todos.begin() + selectedTodos);
             todos.todosIds.erase(todos.todosIds.begin() + selectedTodos);
-            selectedTodos = std::max(0, selectedTodos - 1);
+            this->selectedTodos = std::max(0, this->selectedTodos - 1);
             removeTodo(data, idToRemove);
         }
     }) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 20);
 
-    auto markDoneButton = ftxui::Button("Mark Done", [data] {
+    auto markDoneButton = ftxui::Button("Mark Done", [data, this] {
         if (!todos.todos.empty() && selectedTodos < static_cast<int>(todos.todos.size())) {
             if (!todos.todos[selectedTodos].ends_with("(done)")) {
                 todos.todos[selectedTodos] += " (done)"; 
@@ -243,11 +238,13 @@ ftxui::Component todosComponent(FileData *data) {
         }
     }) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 20);
 
-    auto todosDisplay = ftxui::Renderer(todosList, [todosList] {
+    auto todosDisplay = ftxui::Renderer(todosList, [todosList, this] {
         if (todos.todos.empty()) {
             return ftxui::text("Todo list is empty");
         }
-        return todosList->Render();
+        return ftxui::vbox({
+            todosList->Render() | ftxui::vscroll_indicator | ftxui::frame,
+        });
     });
     
     auto todosButtons = ftxui::Container::Horizontal({
@@ -255,7 +252,7 @@ ftxui::Component todosComponent(FileData *data) {
         markDoneButton,
     });
 
-    auto selectedTodoDate = ftxui::Renderer([data] {
+    auto selectedTodoDate = ftxui::Renderer([data, this] {
         if (todos.todos.empty() || selectedTodos >= static_cast<int>(todos.todos.size())) {
             return ftxui::text("Due Date: No Todo selected");
         }
@@ -289,12 +286,16 @@ ftxui::Component todosComponent(FileData *data) {
         return ftxui::text(dateText);
     });
 
-    auto selectedTodoDescription = ftxui::Renderer([data] {
+    auto selectedTodoDescription = ftxui::Renderer([data, this] {
         if (todos.todos.empty() || selectedTodos >= static_cast<int>(todos.todos.size())) {
             return ftxui::text("Description: No Todo selected");
         }
         const auto& todo = data->todosData[selectedTodos];
-        return ftxui::text("Description: " + todo.todoDescription);
+        std::string description = todo.todoDescription;
+        if (description.empty()) {
+            description = "No description";
+        }
+        return ftxui::text("Description: " + description);
     });
 
     auto todosListLabel = Renderer([] {
@@ -312,7 +313,7 @@ ftxui::Component todosComponent(FileData *data) {
         ftxui::Container::Vertical({
             todosListLabel,
             todosDisplay,
-        }),
+        }) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 60) | ftxui::size(ftxui::HEIGHT, ftxui::EQUAL, 50),
         Renderer([]() -> Element {
             return hbox({
                 filler() | size(WIDTH, EQUAL, 2),
@@ -321,29 +322,26 @@ ftxui::Component todosComponent(FileData *data) {
             });
         }),
         ftxui::Container::Vertical({
-            selectedTodoLabel,
-            selectedTodoDescription,
-            selectedTodoDate,
-            ftxui::Renderer([] { return filler() | size(WIDTH, EQUAL, 1); }),
-            todosButtons,
-        }),
-        Renderer([]() -> Element {
-            return hbox({
-                filler() | size(WIDTH, EQUAL, 2),
-                separator() | size(WIDTH, EQUAL, 1),
-                filler() | size(WIDTH, EQUAL, 2),
-            });
-        }),
-        ftxui::Container::Vertical({
-            addTodoLabel,
-            ftxui::Renderer([] { return ftxui::text("Todo Title:"); }),
-            newTodoInput | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 30),
-            ftxui::Renderer([] { return ftxui::text("Description:"); }),
-            descriptionInput | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 45),
-            ftxui::Renderer([] { return ftxui::text("Due Date:"); }),
-            dueDateInputs,
-            addButton,
-        }),
+            ftxui::Container::Vertical({
+                addTodoLabel,
+                ftxui::Renderer([] { return ftxui::text("Todo Title:"); }),
+                newTodoInput | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 30),
+                ftxui::Renderer([] { return ftxui::text("Description:"); }),
+                descriptionInput | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 45),
+                ftxui::Renderer([] { return ftxui::text("Due Date:"); }),
+                dueDateInputs,
+                addButton,
+            }),
+            ftxui::Renderer([] { return ftxui::separatorEmpty(); }),
+            ftxui::Renderer([] { return ftxui::separatorEmpty(); }),
+            ftxui::Container::Vertical({
+                selectedTodoLabel,
+                selectedTodoDescription,
+                selectedTodoDate,
+                ftxui::Renderer([] { return filler() | size(WIDTH, EQUAL, 1); }),
+                todosButtons,
+            }),
+        }) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 60) | ftxui::size(ftxui::HEIGHT, ftxui::EQUAL, 50),
         ftxui::Renderer([] { return filler(); }),
-    });
+    }) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 180) | ftxui::size(ftxui::HEIGHT, ftxui::EQUAL, 40);
 }

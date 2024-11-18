@@ -15,9 +15,11 @@
 #include "ftxui/dom/elements.hpp"
 
 // UI components
+#include "UIComponents/todosComponent.h"
+#include "UIComponents/milestonesComponent.h"
+
+// Incomplete UI components
 #include "UIComponents/createComponent.cpp"
-#include "UIComponents/todosComponent.cpp"
-#include "UIComponents/milestonesComponent.cpp"
 #include "UIComponents/diaryComponent.cpp"
 #include "UIComponents/aboutComponent.cpp"
 
@@ -59,11 +61,13 @@ class RenderUI {
 
             return Renderer(exitButtons, [=] {
                 return vbox({
-                    text("Are you sure you want to exit?") | hcenter,
+                    text("Exit options:") | hcenter,
                     exitButtons->Render() | hcenter
                 });
             });
         }
+
+        
 
         /**
          * @brief Renders the UI.
@@ -95,10 +99,13 @@ class RenderUI {
 
             auto screen = ftxui::ScreenInteractive::Fullscreen();
 
+            TodosComponent todosComponent;
+            MilestonesComponent milestonesComponent;
+
             auto tabContainer = Container::Tab(
                 {
-                    todosComponent(&inUseFileData),
-                    milestonesComponent(),
+                    todosComponent.renderTodosComponent(&inUseFileData),
+                    milestonesComponent.renderMilestonesComponent(&inUseFileData),
                     diaryComponent(),
                     aboutComponent(),
                     createExitComponent(screen, exitSelected)
@@ -116,10 +123,10 @@ class RenderUI {
                     text("Log4Daily") | bold | hcenter,
                     separator(),
                     centeredTabToggle->Render(),
-                    filler(), 
+                    filler(),
                     tabContainer->Render(),
-                    filler(), 
-                }) | border;
+                    filler(),
+                }) | border | size(WIDTH, EQUAL, 200) | size(HEIGHT, EQUAL, 50) | center;
             });
 
             screen.Loop(renderer);

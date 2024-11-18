@@ -32,6 +32,8 @@ add_executable(log4daily
     ${PROJECT_SOURCE_DIR}/app/handlers.cpp
     ${PROJECT_SOURCE_DIR}/app/Storage/localStorage.cpp
     ${PROJECT_SOURCE_DIR}/app/mainThread.cpp
+    ${PROJECT_SOURCE_DIR}/app/UIComponents/todosComponent.cpp
+    ${PROJECT_SOURCE_DIR}/app/UIComponents/milestonesComponent.cpp
     ${PROJECT_SOURCE_DIR}/app/main.cpp
 )
 
