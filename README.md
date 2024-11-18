@@ -1,9 +1,11 @@
+
 ### README.md
+
 # log4daily
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2baaf677039f4b95983f88b785010447)](https://app.codacy.com/gh/mosmo0220/log4daily/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
-### Project Overview 📖
+## Project Overview 📖
 
 **log4daily** is a work-in-progress application with the goal of providing a robust platform for task planning, milestone tracking, and journaling. The application aims to leverage AI for insightful analysis and reporting, helping users stay organized, track progress, and gain valuable insights into their daily activities and accomplishments.
 
@@ -38,7 +40,7 @@ To install **log4daily**, follow these steps:
 
 This script will make binary file, copy it to app folder and add to console path
 
-### Update 🔄
+ ### Update 🔄
 To update **log4daily** to the latest version, follow these steps:
 
 1. **Navigate to the project directory:**
