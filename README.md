@@ -1,5 +1,7 @@
 ### README.md
 # log4daily
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2baaf677039f4b95983f88b785010447)](https://app.codacy.com/gh/mosmo0220/log4daily/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 ### Project Overview 📖
 
