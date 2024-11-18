@@ -7,26 +7,26 @@ Log4Daily is a feature-rich console application meticulously crafted in C++ to e
 ## Key Features
 
 * **Task Management:**
-    * Create, modify, and delete tasks with detailed descriptions and deadlines.
-    * Mark tasks as complete with an intuitive checkbox interface.
-    * Filter tasks by completion status, due date, or keywords.
-    * Prioritize tasks to focus on what matters most.
+  * Create, modify, and delete tasks with detailed descriptions and deadlines.
+  * Mark tasks as complete with an intuitive checkbox interface.
+  * Filter tasks by completion status, due date, or keywords.
+  * Prioritize tasks to focus on what matters most.
 * **Milestone Tracking:**
-    * Define milestones with clear objectives and target dates.
-    * Track progress towards milestones with granular checkpoints.
-    * Visualize milestone timelines to monitor progress over time.
+  * Define milestones with clear objectives and target dates.
+  * Track progress towards milestones with granular checkpoints.
+  * Visualize milestone timelines to monitor progress over time.
 * **Diary Entries:**
-    * Record daily reflections, thoughts, and experiences in a private journal.
-    * Organize journal entries by date for easy retrieval and review.
-    * Search journal entries by keywords to quickly find relevant content.
+  * Record daily reflections, thoughts, and experiences in a private journal.
+  * Organize journal entries by date for easy retrieval and review.
+  * Search journal entries by keywords to quickly find relevant content.
 * **User-Friendly Interface:**
-    * FTXUI provides a responsive and visually appealing terminal-based interface.
-    * Intuitive navigation and interaction with clear menus and prompts.
-    * Customizable themes and color schemes to personalize the user experience.
+  * FTXUI provides a responsive and visually appealing terminal-based interface.
+  * Intuitive navigation and interaction with clear menus and prompts.
+  * Customizable themes and color schemes to personalize the user experience.
 * **Data Persistence:**
-    * Robust data management using JSON serialization for reliable storage.
-    * Secure storage of sensitive information in user-specific configuration files.
-    * Automatic data backup and recovery mechanisms to prevent data loss.
+  * Robust data management using JSON serialization for reliable storage.
+  * Secure storage of sensitive information in user-specific configuration files.
+  * Automatic data backup and recovery mechanisms to prevent data loss.
 
 ## File Structure and Functionality
 
