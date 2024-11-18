@@ -1,3 +1,4 @@
+
 # Security Policy
 
 ## Project Status: Beta
@@ -34,8 +35,8 @@ This vulnerability could allow an attacker to..."
 **Additional Information:**
 
 * All vulnerability reports will be kept confidential and addressed as quickly as possible.
-*  I encourage you to report any issues, even if they seem minor. All feedback is valuable and helps in the development of the project.
-*  To ensure project security, I use static code analysis tools and regularly back up the source code.
+* I encourage you to report any issues, even if they seem minor. All feedback is valuable and helps in the development of the project.
+* To ensure project security, I use static code analysis tools and regularly back up the source code.
 
 **License:** AGPL3
 
