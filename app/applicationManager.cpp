@@ -1,22 +1,22 @@
-#include "mainThread.h"
+#include "applicationManager.h"
 
 #include <iostream>
 #include <string>
 #include <vector>
 
 // For handling user inputs
-#include "handlers.h"
+#include "inputHandlers.h"
 // For handling log4daily files
 #include "./Storage/localStorage.h"
 
-MainThread::MainThread(std::string workingDirectory, std::string configPath) : localStorage(workingDirectory + configPath) {
+ApplicationManager::ApplicationManager(std::string workingDirectory, std::string configPath) : localStorage(workingDirectory + configPath) {
     this->workingDirectory = workingDirectory;
     this->configName = configPath;
 }
 
-CommandType MainThread::run(int argc, char* argv[]) {
-    std::vector<Command> commands = Handlers::parseConsoleInputs(argc, argv);
-    std::vector<Command> supportedCommands = Handlers::filterForSupportedCommands(commands);
+CommandType ApplicationManager::run(int argc, char* argv[]) {
+    std::vector<Command> commands = InputHandlers::parseConsoleInputs(argc, argv);
+    std::vector<Command> supportedCommands = InputHandlers::filterForSupportedCommands(commands);
     
     std::string commandName;
     std::string commandArgument;
@@ -77,6 +77,9 @@ CommandType MainThread::run(int argc, char* argv[]) {
     } else if (commandName == "--help") {
         showHelp();
         return CommandType::Help;
+    } else if (commandName == "--list" || commandName == "--import" || commandName == "--export" || commandName == "--set-theme" || commandName == "--set-language") {
+        std::cout << "Command not implemented yet: " << commandName << std::endl;
+        return CommandType::Other;
     } else {
         std::cout << "Unsupported command: " << commands[0].name << std::endl;
         std::cout << "Showing help instead." << std::endl;
@@ -88,11 +91,11 @@ CommandType MainThread::run(int argc, char* argv[]) {
     return CommandType::Failed;
 }
 
-void MainThread::updateFileData(FileData data) {
+void ApplicationManager::updateFileData(FileData data) {
     localStorage.updateDataToFile(workingDirectory, data.log4FileName, data);
 }
 
-void MainThread::showMessage(CommandType respond, std::string message) {
+void ApplicationManager::showMessage(CommandType respond, std::string message) {
     switch (respond)
     {
         case CommandType::New:
@@ -121,19 +124,27 @@ void MainThread::showMessage(CommandType respond, std::string message) {
     if (!message.empty()) std::cout << message << std::endl;
 }
 
-std::string MainThread::getRespondMessage() {
+std::string ApplicationManager::getRespondMessage() {
     return respondMessage;
 }
 
-FileData MainThread::getOpenedFile() {
+FileData ApplicationManager::getOpenedFile() {
     return openedFile;
 }
 
-void MainThread::showHelp() {
+void ApplicationManager::showHelp() {
     std::cout << "Usage: log4daily [command] [log4_file_name]" << std::endl;
     std::cout << "Commands:" << std::endl;
-    std::cout << "  --new    [log4_file_name]    Create a new log4daily file" << std::endl;
-    std::cout << "  --open   [log4_file_name]    Open an existing log4daily file" << std::endl;
-    std::cout << "  --delete [log4_file_name]    Delete an existing log4daily file" << std::endl;
-    std::cout << "  --help                       Show this help message" << std::endl;
+    std::cout << "  --new                   [log4_file_name]    Create a new log4daily file" << std::endl;
+    std::cout << "  --open                  [log4_file_name]    Open an existing log4daily file" << std::endl;
+    std::cout << "  --delete                [log4_file_name]    Delete an existing log4daily file" << std::endl;
+    std::cout << "  --list (NIY)            [None]              List out all existing log4daily files" << std::endl;
+    std::cout << "  --import (NIY)          [path_to_file]      Import data from provided log4daily file" << std::endl;
+    std::cout << "  --export (NIY)          [log4_file_name]    Export log4daily file to documents" << std::endl;
+    std::cout << "  --set-theme (NIY)       [theme_name]        Set the theme of the application" << std::endl;
+    std::cout << "  --set-language (NIY)    [language_name]     Set the language of the application" << std::endl;
+    std::cout << "  --help                                      Show this help message" << std::endl;
+
+    std::cout << "Note: log4_file_name should not contain spaces." << std::endl;
+    std::cout << std::endl << "'NIY': Not implemented yet." << std::endl;
 }

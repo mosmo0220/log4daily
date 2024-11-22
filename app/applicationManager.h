@@ -5,15 +5,15 @@
  * 
  * The MainThread class provides functionality for managing the main thread of the log4daily application.
  */
-#ifndef MAIN_THREAD_H
-#define MAIN_THREAD_H
+#ifndef APPLICATION_MANAGER_H
+#define APPLICATION_MANAGER_H
 
 #include <iostream>
 #include <string>
 #include <vector>
 
 // For handling user inputs
-#include "handlers.h"
+#include "inputHandlers.h"
 // For handling log4daily files
 #include "./Storage/localStorage.h"
 
@@ -28,26 +28,17 @@ enum class CommandType {
 };
 
 /**
- * @class MainThread
- * @brief Provides functionalities to manage the main thread of the log4daily application.
+ * @class ApplicationManager
+ * @brief Provides functionalities to manage the log4daily application.
  * 
- * The MainThread class provides functionalities to manage the main thread of the log4daily application.
- * It handles the parsing of console inputs, filtering of supported commands, and execution of the commands.
- * The class also provides methods to show help messages and respond to user inputs.
+ * The ApplicationManager class provides functionalities to manage the log4daily application.
+ * It includes methods to run the main thread, update the log4daily file data, and show messages to the user.
+ * 
+ * The class also includes methods to get the response message from the main thread and the opened log4daily file data.
  */
-class MainThread {
+class ApplicationManager {
 public:
-    MainThread(std::string workingDirectory, std::string configPath);
-    /**
-     * @brief Runs the main thread of the log4daily application.
-     * 
-     * This function runs the main thread of the log4daily application based on the console inputs.
-     * It parses the console inputs, filters the supported commands, and executes the commands accordingly.
-     * 
-     * @param argc The number of command-line arguments.
-     * @param argv The array of command-line arguments.
-     * @return CommandType The type of command executed by the main thread.
-     */
+    ApplicationManager(std::string workingDirectory, std::string configPath);
     CommandType run(int argc, char* argv[]);
     /**
      * @brief Updates the data in the opened log4daily file.
@@ -94,4 +85,4 @@ private:
     void showHelp();
 };
 
-#endif // MAIN_THREAD_H
+#endif // APPLICATION_MANAGER_H

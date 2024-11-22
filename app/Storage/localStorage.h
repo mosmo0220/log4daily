@@ -29,10 +29,9 @@ struct Date
 
     short hour;
     short minute;
-    short second;
 
     bool operator==(const Date& other) const {
-        return day == other.day && month == other.month && year == other.year && hour == other.hour && minute == other.minute && second == other.second;
+        return day == other.day && month == other.month && year == other.year && hour == other.hour && minute == other.minute;
     }
 };
 
@@ -67,10 +66,9 @@ struct MilestoneProgressPoint
 {
     Date date;
     bool isCompleted;
-    std::string progressDescription;
 
     bool operator==(const MilestoneProgressPoint& other) const {
-        return date == other.date && isCompleted == other.isCompleted && progressDescription == other.progressDescription;
+        return date == other.date && isCompleted == other.isCompleted;
     }
 };
 

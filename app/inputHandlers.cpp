@@ -1,10 +1,10 @@
-#include "handlers.h"
+#include "inputHandlers.h"
 
 #include <vector>
 #include <string>
 #include <algorithm>
 
-std::vector<Command> Handlers::parseConsoleInputs(int argc, char* argv[]) {
+std::vector<Command> InputHandlers::parseConsoleInputs(int argc, char* argv[]) {
     std::vector<Command> commands;
 
     for (int i = 0; i < argc; ++i) {
@@ -29,7 +29,7 @@ std::vector<Command> Handlers::parseConsoleInputs(int argc, char* argv[]) {
     return commands;
 }
 
-std::vector<Command> Handlers::filterForSupportedCommands(const std::vector<Command>& commands) {
+std::vector<Command> InputHandlers::filterForSupportedCommands(const std::vector<Command>& commands) {
     std::vector<Command> filteredCommands;
 
     for (const auto& cmd : commands) {
