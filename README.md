@@ -66,7 +66,7 @@ This will update your local copy of **log4daily** with the latest changes and en
 
 📂 **include**: Contains essential libraries used within the application.
 
-**Documentation.md**: Holds the application documentation
+Documentation will be added at first stable version
 
 ### License 📜
 

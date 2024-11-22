@@ -6,7 +6,7 @@
 #include <iostream>
 
 #include "../Storage/localStorage.h"
-#include "../mainThread.h"
+#include "../applicationManager.h"
 
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/component_base.hpp"
@@ -18,12 +18,6 @@ TodosComponent::TodosComponent() {
     selectedTodos = 0;
 }
 
-/**
- * @brief Creates a limited range input component.
- * 
- * This function creates a limited range input component for an integer value.
- * The input component is limited to the specified range of values.
- */
 ftxui::Component TodosComponent::limitedRangeInput(std::string* content, const std::string& placeholder, int minValue, int maxValue) {
     auto input = ftxui::Input(content, placeholder);
     
@@ -45,12 +39,6 @@ ftxui::Component TodosComponent::limitedRangeInput(std::string* content, const s
     });
 }
 
-/**
- * @brief Creates a limited range input component for the day of the month.
- * 
- * This function creates a limited range input component for the day of the month.
- * The input component is limited to the range of days in the specified month.
- */
 ftxui::Component TodosComponent::limitedRangeInputDay(std::string* content, const std::string& placeholder) {
     auto input = ftxui::Input(content, placeholder);
 
@@ -86,13 +74,6 @@ ftxui::Component TodosComponent::limitedRangeInputDay(std::string* content, cons
     });
 }
 
-/**
- * @brief Adds a new todo item to the list.
- * 
- * This function adds a new todo item to the list of todos.
- * The new todo item is created with the specified name, description, and due date.
- * The function returns the ID of the newly created todo item.
- */
 int TodosComponent::addTodo(FileData *data, Date dueDate) {
     TodoData newTodo;
     
@@ -107,7 +88,6 @@ int TodosComponent::addTodo(FileData *data, Date dueDate) {
     createDate.year = tm.tm_year + 1900;
     createDate.hour = tm.tm_hour;
     createDate.minute = tm.tm_min;
-    createDate.second = tm.tm_sec;
     newTodo.createDate = createDate;
 
     newTodo.dueDate = dueDate;
@@ -119,12 +99,6 @@ int TodosComponent::addTodo(FileData *data, Date dueDate) {
     return newTodo.id;
 }
 
-/**
- * @brief Removes a todo item from the list.
- * 
- * This function removes a todo item from the list of todos.
- * The todo item with the specified ID is removed from the list.
- */
 void TodosComponent::removeTodo(FileData *data, int id) {
     auto it = std::remove_if(data->todosData.begin(), data->todosData.end(), [id](const TodoData& todo) {
         return todo.id == id;
@@ -132,13 +106,6 @@ void TodosComponent::removeTodo(FileData *data, int id) {
     data->todosData.erase(it, data->todosData.end());
 }
 
-/**
- * @brief Marks a todo item as done.
- * 
- * This function marks a todo item as done or undone.
- * The todo item with the specified ID is marked as done if the done parameter is true,
- * and marked as undone if the done parameter is false.
- */
 void TodosComponent::markTodoDone(FileData *data, int id, bool done) {
     for (auto& todo : data->todosData) {
         if (todo.id == id) {
@@ -152,12 +119,6 @@ void TodosComponent::markTodoDone(FileData *data, int id, bool done) {
     }
 }
 
-/**
- * @brief Creates the todos component.
- * 
- * This function creates the todos component, which displays the list of todos and allows the user to interact with them.
- * The component includes options to add new todos, remove existing todos, and mark todos as done.
- */
 ftxui::Component TodosComponent::renderTodosComponent(FileData *data) {
     if (!data) return ftxui::Renderer([] { return ftxui::text("Error: Data is null"); });
 
@@ -204,7 +165,7 @@ ftxui::Component TodosComponent::renderTodosComponent(FileData *data) {
     auto addButton = ftxui::Button("Add Todo", [data, this] {
         if (!newTodoName.empty()) {
             try {
-                int newId = addTodo(data, {static_cast<short>(std::stoi(dueDay)), static_cast<short>(std::stoi(dueMonth)), static_cast<short>(std::stoi(dueYear)), static_cast<short>(std::stoi(dueHour)), static_cast<short>(std::stoi(dueMinute)), 0});
+                int newId = addTodo(data, {static_cast<short>(std::stoi(dueDay)), static_cast<short>(std::stoi(dueMonth)), static_cast<short>(std::stoi(dueYear)), static_cast<short>(std::stoi(dueHour)), static_cast<short>(std::stoi(dueMinute))});
                 todos.todos.push_back(newTodoName);
                 todos.todosIds.push_back(newId);
                 newTodoName.clear();
@@ -250,6 +211,13 @@ ftxui::Component TodosComponent::renderTodosComponent(FileData *data) {
     auto todosButtons = ftxui::Container::Horizontal({
         removeButton,
         markDoneButton,
+    });
+
+    auto selectedTodoLabel = Renderer([this] {
+        if (todos.todos.empty() || selectedTodos >= static_cast<int>(todos.todos.size())) {
+            return ftxui::text("Selected Todo: No todo is selected");
+        }
+        return ftxui::text("Selected Todo: " + todos.todos[selectedTodos]);
     });
 
     auto selectedTodoDate = ftxui::Renderer([data, this] {
@@ -298,20 +266,10 @@ ftxui::Component TodosComponent::renderTodosComponent(FileData *data) {
         return ftxui::text("Description: " + description);
     });
 
-    auto todosListLabel = Renderer([] {
-        return text("Todos list:");
-    });
-    auto selectedTodoLabel = Renderer([] {
-        return text("Selected Todo:");
-    });
-    auto addTodoLabel = Renderer([] {
-        return text("Add Todo:");
-    });
-
     return ftxui::Container::Horizontal({
         ftxui::Renderer([] { return filler(); }),
         ftxui::Container::Vertical({
-            todosListLabel,
+            Renderer([] { return text("Todos list:"); }),
             todosDisplay,
         }) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 60) | ftxui::size(ftxui::HEIGHT, ftxui::EQUAL, 50),
         Renderer([]() -> Element {
@@ -323,7 +281,7 @@ ftxui::Component TodosComponent::renderTodosComponent(FileData *data) {
         }),
         ftxui::Container::Vertical({
             ftxui::Container::Vertical({
-                addTodoLabel,
+                Renderer([] { return text("Add Todo:"); }),
                 ftxui::Renderer([] { return ftxui::text("Todo Title:"); }),
                 newTodoInput | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 30),
                 ftxui::Renderer([] { return ftxui::text("Description:"); }),

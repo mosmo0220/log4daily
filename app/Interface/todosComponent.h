@@ -7,7 +7,7 @@
 #include <iostream>
 
 #include "../Storage/localStorage.h"
-#include "../mainThread.h"
+#include "../applicationManager.h"
 
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/component_base.hpp"
@@ -65,8 +65,8 @@ public:
 private:
     TodosListData todos;
     int selectedTodos = 0;
-    std::string newTodoName;
-    std::string newTodoDescription;
+    std::string newTodoName = "";
+    std::string newTodoDescription = "";
 
     std::string dueYear;
     std::string dueMonth;

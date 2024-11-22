@@ -107,15 +107,14 @@ nlohmann::json LocalStorage::DateToJson(const Date& date) {
         {"month", date.month},
         {"year", date.year},
         {"hour", date.hour},
-        {"minute", date.minute},
-        {"second", date.second}
+        {"minute", date.minute}
     };
 }
 
 Date LocalStorage::JsonToDate(const nlohmann::json& j) {
     return {
         j["day"], j["month"], j["year"],
-        j["hour"], j["minute"], j["second"]
+        j["hour"], j["minute"]
     };
 }
 
@@ -142,16 +141,14 @@ TodoData LocalStorage::JsonToTodoData(const nlohmann::json& j) {
 nlohmann::json LocalStorage::MilestoneProgressPointToJson(const MilestoneProgressPoint& point) {
     return {
         {"date", DateToJson(point.date)},
-        {"isCompleted", point.isCompleted},
-        {"progressDescription", point.progressDescription}
+        {"isCompleted", point.isCompleted}
     };
 }
 
 MilestoneProgressPoint LocalStorage::JsonToMilestoneProgressPoint(const nlohmann::json& j) {
     return {
         JsonToDate(j["date"]),
-        j["isCompleted"],
-        j["progressDescription"]
+        j["isCompleted"]
     };
 }
 

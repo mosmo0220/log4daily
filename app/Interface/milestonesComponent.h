@@ -7,7 +7,7 @@
 #include <iostream>
 
 #include "../Storage/localStorage.h"
-#include "../mainThread.h"
+#include "../applicationManager.h"
 
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/screen_interactive.hpp"
@@ -19,9 +19,12 @@ struct MilestonesListData {
     std::vector<int> milestonesIds;
 };
 
+struct MilestonesProgressPoints {
+    std::vector<MilestoneProgressPoint> progressPoints;
+};
+
 struct NewMilestoneProgressPoint {
     bool isCompleted;
-    std::string progressDescription;
 };
 
 class MilestonesComponent {
@@ -48,6 +51,13 @@ public:
      */
     void addMilestoneProgressPoint(FileData *data, int id);
     /**
+     * @brief Gets the progress points for a milestone.
+     * 
+     * This function retrieves the progress points for a milestone in the list of milestones.
+     * The progress points for the milestone with the specified ID are retrieved.
+     */
+    MilestonesProgressPoints getMilestonesPoints(FileData *data, int id);
+    /**
      * @brief Creates the milestones component.
      * 
      * This function creates the milestones component, which displays the list of milestones and allows the user to interact with them.
@@ -58,10 +68,11 @@ public:
 private:
     MilestonesListData milestones;
     int selectedMilestones = 0;
-    std::string newMilestoneName;
-    std::string newMilestoneDescription;
+    std::string newMilestoneName = "";
+    std::string newMilestoneDescription = "";
+    std::string notificationText = "";
 
-    NewMilestoneProgressPoint newProgressPoint;
+    NewMilestoneProgressPoint newProgressPoint = {false};
 };
 
 #endif // MILESTONES_COMPONENT_H

@@ -1,6 +1,8 @@
+#include <thread>
+
 #include "./Storage/manageConfig.cpp"
-#include "mainThread.h"
-#include "renderUI.cpp"
+#include "applicationManager.h"
+#include "uiRenderer.h"
 
 /**
  * @brief The main function of the log4daily application.
@@ -19,17 +21,17 @@ int main(int argc, char** argv) {
         return 1;
     }
     
-    MainThread mainThread(configRespond + "/", configFileName);
-    CommandType respond = mainThread.run(argc, argv);
+    ApplicationManager applicationManager(configRespond + "/", configFileName);
+    CommandType respond = applicationManager.run(argc, argv);
     
-    std::string message = mainThread.getRespondMessage().empty() ? "" : mainThread.getRespondMessage();
-    mainThread.showMessage(respond, message);    
+    std::string message = applicationManager.getRespondMessage().empty() ? "" : applicationManager.getRespondMessage();
+    applicationManager.showMessage(respond, message);    
 
     if (respond == CommandType::New || respond == CommandType::Open) {
         std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-        RenderUI rUI(mainThread);
-        int returnCode = rUI.renderUI();
-        std::cout << rUI.getExitMessage() << std::endl;
+        uiRenderer UI(&applicationManager);
+        int returnCode = UI.renderUI();
+        std::cout << UI.getExitMessage() << std::endl;
         return returnCode;
     }
     return 0;

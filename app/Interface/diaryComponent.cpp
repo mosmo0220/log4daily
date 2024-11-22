@@ -1,3 +1,5 @@
+#include "diaryComponent.h"
+
 #include <vector>
 #include <string>
 #include "ftxui/component/component.hpp"
@@ -5,9 +7,9 @@
 
 using namespace ftxui;
 
-Component CreateComponent(const std::vector<std::string>& entries, int& selected, const std::string& content) {
-    auto radiobox = Radiobox(&entries, &selected);
-    auto renderer = Renderer([=] { return text(content); });
+Component DiaryComponent::diaryComponent() {
+    auto radiobox = Radiobox(&diary, &selected_diary);
+    auto renderer = Renderer([=] { return text("Diary"); });
     return Container::Vertical({
         ftxui::Renderer([] { return filler(); }),
         radiobox,

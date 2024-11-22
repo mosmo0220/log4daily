@@ -19,9 +19,15 @@ static const std::vector<std::string> supportedCommands = {
     "--new",
     "--open",
     "--delete",
+    // Will be implemented in the future
+    "--list",
+    "--import",
+    "--export",
+    "--set-theme",
+    "--set-language"   
 };
 
-class Handlers {
+class InputHandlers {
     public:
         /**
          * @brief Parses console inputs into a vector of Command structures.
