@@ -30,8 +30,11 @@ int main(int argc, char** argv) {
     if (respond == CommandType::New || respond == CommandType::Open) {
         std::this_thread::sleep_for(std::chrono::milliseconds(1500));
         uiRenderer UI(&applicationManager);
-        int returnCode = UI.renderUI();
-        std::cout << UI.getExitMessage() << std::endl;
+        
+        int returnCode = 0;
+        do {
+            returnCode = UI.renderUI();
+        } while (returnCode == 1);
         return returnCode;
     }
     return 0;

@@ -15,13 +15,16 @@ using namespace ftxui;
 class uiRenderer {
     public:
         uiRenderer(ApplicationManager *_applicationManager);
-        Component createExitComponent(ScreenInteractive& screen, int& exitSelected);
         int renderUI();
-        std::string getExitMessage();
+        void discardFileData();
+        void saveFileData();
+        void exit();
     private:
         ApplicationManager *applicationManager;
+        ScreenInteractive *screen_ptr;
         FileData inUseFileData;
-        bool exitedWithoutSaving = false;
+        FileData inUseFileDataBeforeSave;
+        int reloadUI = 0;
 };
 
 #endif // UI_RENDERER_H

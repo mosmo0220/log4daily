@@ -36,7 +36,7 @@ add_executable(log4daily
     ${PROJECT_SOURCE_DIR}/app/Interface/todosComponent.cpp
     ${PROJECT_SOURCE_DIR}/app/Interface/milestonesComponent.cpp
     ${PROJECT_SOURCE_DIR}/app/Interface/diaryComponent.cpp
-    ${PROJECT_SOURCE_DIR}/app/Interface/aboutComponent.cpp
+    ${PROJECT_SOURCE_DIR}/app/Interface/exitComponent.cpp
     ${PROJECT_SOURCE_DIR}/app/main.cpp
 )
 

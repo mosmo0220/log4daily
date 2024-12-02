@@ -14,8 +14,7 @@ public:
     DiaryComponent() {};
     Component diaryComponent();
 private:
-    std::vector<std::string> diary = {"Info 1", "Info 2", "Info 3"};
-    int selected_diary = 0;
+    void getTodayDate(std::string &today_date);    
 };
 
 #endif // DIARYCOMPONENT_H
