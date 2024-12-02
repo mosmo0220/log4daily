@@ -185,14 +185,6 @@ Component MilestonesComponent::renderMilestonesComponent(FileData *data) {
 
             auto milestonePoints = getMilestonesPoints(data, milestones.milestonesIds[selectedMilestones]);
 
-            if (milestonePoints.progressPoints.empty()) {
-                return ftxui::text("No progress points for this milestone");
-            }
-
-            if (milestonePoints.progressPoints.empty()) {
-                return ftxui::text("No progress points for this milestone");
-            }
-
             auto c = ftxui::Canvas(104, 78);
 
 

@@ -19,44 +19,19 @@
 // UI components
 #include "Interface/todosComponent.h"
 #include "Interface/milestonesComponent.h"
-
-// Incomplete UI components
 #include "Interface/diaryComponent.h"
-#include "Interface/aboutComponent.h"
+#include "Interface/exitComponent.h"
 
 using namespace ftxui;
 
 uiRenderer::uiRenderer(ApplicationManager *_applicationManager) : inUseFileData(_applicationManager->getOpenedFile()) {
     applicationManager = _applicationManager;
-}
-
-Component uiRenderer::createExitComponent(ScreenInteractive& screen, int& exitSelected) {
-    auto exitButtons = Container::Horizontal({
-        Button("Exit and Save", [this, &screen, &exitSelected] {
-            exitSelected = 1;
-            applicationManager->updateFileData(inUseFileData);
-            screen.Clear();
-            screen.ExitLoopClosure()();
-        }),
-        Button("Exit without Saving", [this, &screen, &exitSelected] {
-            exitSelected = 1;
-            exitedWithoutSaving = true;
-            screen.Clear();
-            screen.ExitLoopClosure()();
-        })
-    });
-
-    return Renderer(exitButtons, [=] {
-        return vbox({
-            text("Exit options:") | hcenter,
-            exitButtons->Render() | hcenter
-        });
-    });
+    inUseFileDataBeforeSave = inUseFileData;
 }
 
 int uiRenderer::renderUI() {
     std::vector<std::string> tabLabels{
-        "Todos", "Milestones", "Diary", "About", "Exit"
+        "Todos", "Milestones", "Diary", "Exit"
     };
 
     int selectedTab = 0;
@@ -70,27 +45,20 @@ int uiRenderer::renderUI() {
         }) | center;            
     });
 
-    int todosSelected = 0;
-    int milestonesSelected = 0;
-    int diarySelected = 0;
-    int settingsSelected = 0;
-    int aboutSelected = 0;
-    int exitSelected = 0;
-
-    auto screen = ftxui::ScreenInteractive::Fullscreen();
+    auto screen = ScreenInteractive::Fullscreen();
+    screen_ptr = &screen;
 
     TodosComponent todosComponent;
     MilestonesComponent milestonesComponent;
     DiaryComponent diaryComponent;
-    AboutComponent aboutComponent;
+    ExitComponent exitComponent;
 
     auto tabContainer = Container::Tab(
         {
             todosComponent.renderTodosComponent(&inUseFileData),
             milestonesComponent.renderMilestonesComponent(&inUseFileData),
             diaryComponent.diaryComponent(),
-            aboutComponent.aboutComponent(),
-            createExitComponent(screen, exitSelected)
+            exitComponent.exitComponent(*this)
         },
         &selectedTab
     );
@@ -114,9 +82,27 @@ int uiRenderer::renderUI() {
     });
 
     screen.Loop(renderer);
-    return 0;
+    return reloadUI;
 }
 
-std::string uiRenderer::getExitMessage() {
-    return !exitedWithoutSaving ? "Exiting and saving" : "Exiting without saving";
+void uiRenderer::discardFileData() {
+    inUseFileData = inUseFileDataBeforeSave;
+
+    screen_ptr->Clear();
+    screen_ptr->ExitLoopClosure()();
+    reloadUI = 1;
+}
+
+void uiRenderer::saveFileData() {
+    applicationManager->updateFileData(inUseFileData);
+
+    screen_ptr->Clear();
+    screen_ptr->ExitLoopClosure()();
+    reloadUI = 1;
+}
+
+void uiRenderer::exit() {
+    screen_ptr->Clear();
+    screen_ptr->ExitLoopClosure()();
+    reloadUI = 0;
 }
