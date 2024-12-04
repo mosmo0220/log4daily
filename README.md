@@ -62,9 +62,7 @@ This will update your local copy of **log4daily** with the latest changes and en
 
 ### Project Structure 🗂️
 
-📂 **app**: The main directory containing source code and tests. Testing is performed using the **doctest** library to ensure code reliability and correctness.
-
-📂 **include**: Contains essential libraries used within the application.
+📂 **app**: The main directory contain source files, include files and headers file
 
 Documentation will be added at first stable version
 

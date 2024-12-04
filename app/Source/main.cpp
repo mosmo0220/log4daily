@@ -1,8 +1,8 @@
 #include <thread>
 
-#include "./Storage/manageConfig.cpp"
-#include "applicationManager.h"
-#include "uiRenderer.h"
+#include "../Headers/Storage/manageConfig.h"
+#include "../Headers/applicationManager.h"
+#include "../Headers/uiRenderer.h"
 
 /**
  * @brief The main function of the log4daily application.
@@ -15,13 +15,14 @@
  * @return int The exit code of the application.
  */
 int main(int argc, char** argv) {
-    std::string configRespond = manageConfig();
+    ManageConfig manageConfig;
+    std::string configRespond = manageConfig.prepareConfigFile();
     if (configRespond == "Problem acured while creating config folder" || configRespond == "Error!") {
         std::cerr << configRespond << std::endl;
         return 1;
     }
     
-    ApplicationManager applicationManager(configRespond + "/", configFileName);
+    ApplicationManager applicationManager(configRespond + "/", manageConfig.configFileName);
     CommandType respond = applicationManager.run(argc, argv);
     
     std::string message = applicationManager.getRespondMessage().empty() ? "" : applicationManager.getRespondMessage();
@@ -29,6 +30,7 @@ int main(int argc, char** argv) {
 
     if (respond == CommandType::New || respond == CommandType::Open) {
         std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+        applicationManager.registerToday();
         uiRenderer UI(&applicationManager);
         
         int returnCode = 0;

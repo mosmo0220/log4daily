@@ -1,8 +1,8 @@
-#include "exitComponent.h"
+#include "../../Headers/Interface/exitComponent.h"
 
-#include "../applicationManager.h"
-#include "../Storage/localStorage.h"
-#include "../uiRenderer.h"
+#include "../../Headers/applicationManager.h"
+#include "../../Headers/Storage/localStorage.h"
+#include "../../Headers/uiRenderer.h"
 
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/screen_interactive.hpp"

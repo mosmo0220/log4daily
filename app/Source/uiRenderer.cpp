@@ -1,4 +1,4 @@
-#include "uiRenderer.h"
+#include "../Headers/uiRenderer.h"
 
 #include <memory>
 #include <string>
@@ -6,8 +6,8 @@
 #include <functional>
 
 // Log4daily components
-#include "./Storage/localStorage.h"
-#include "applicationManager.h"
+#include "../Headers/Storage/localStorage.h"
+#include "../Headers/applicationManager.h"
 
 // FTXUI components
 #include "ftxui/component/captured_mouse.hpp"
@@ -17,10 +17,10 @@
 #include "ftxui/dom/elements.hpp"
 
 // UI components
-#include "Interface/todosComponent.h"
-#include "Interface/milestonesComponent.h"
-#include "Interface/diaryComponent.h"
-#include "Interface/exitComponent.h"
+#include "../Headers/Interface/todosComponent.h"
+#include "../Headers/Interface/milestonesComponent.h"
+#include "../Headers/Interface/diaryComponent.h"
+#include "../Headers/Interface/exitComponent.h"
 
 using namespace ftxui;
 
@@ -57,7 +57,7 @@ int uiRenderer::renderUI() {
         {
             todosComponent.renderTodosComponent(&inUseFileData),
             milestonesComponent.renderMilestonesComponent(&inUseFileData),
-            diaryComponent.diaryComponent(),
+            diaryComponent.diaryComponent(&inUseFileData),
             exitComponent.exitComponent(*this)
         },
         &selectedTab

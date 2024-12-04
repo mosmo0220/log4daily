@@ -1,12 +1,12 @@
-#include "milestonesComponent.h"
+#include "../../Headers/Interface/milestonesComponent.h"
 
 #include <vector>
 #include <string>
 #include <algorithm>
 #include <iostream>
 
-#include "../Storage/localStorage.h"
-#include "../applicationManager.h"
+#include "../../Headers/Storage/localStorage.h"
+#include "../../Headers/applicationManager.h"
 
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/screen_interactive.hpp"
