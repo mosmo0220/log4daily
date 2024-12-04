@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+#include "../Storage/localStorage.h"
+
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 
@@ -12,9 +14,10 @@ using namespace ftxui;
 class DiaryComponent {
 public:
     DiaryComponent() {};
-    Component diaryComponent();
+    Component diaryComponent(FileData *data);
 private:
-    void getTodayDate(std::string &today_date);    
+    std::string newEntryName;
+    std::string newEntryContent;
 };
 
 #endif // DIARYCOMPONENT_H

@@ -29,19 +29,20 @@ FetchContent_MakeAvailable(ftxui)
 
 # Add the executable
 add_executable(log4daily 
-    ${PROJECT_SOURCE_DIR}/app/inputHandlers.cpp
-    ${PROJECT_SOURCE_DIR}/app/Storage/localStorage.cpp
-    ${PROJECT_SOURCE_DIR}/app/applicationManager.cpp
-    ${PROJECT_SOURCE_DIR}/app/uiRenderer.cpp
-    ${PROJECT_SOURCE_DIR}/app/Interface/todosComponent.cpp
-    ${PROJECT_SOURCE_DIR}/app/Interface/milestonesComponent.cpp
-    ${PROJECT_SOURCE_DIR}/app/Interface/diaryComponent.cpp
-    ${PROJECT_SOURCE_DIR}/app/Interface/exitComponent.cpp
-    ${PROJECT_SOURCE_DIR}/app/main.cpp
+    ${PROJECT_SOURCE_DIR}/app/Source/inputHandlers.cpp
+    ${PROJECT_SOURCE_DIR}/app/Source/Storage/localStorage.cpp
+    ${PROJECT_SOURCE_DIR}/app/Source/Storage/manageConfig.cpp
+    ${PROJECT_SOURCE_DIR}/app/Source/applicationManager.cpp
+    ${PROJECT_SOURCE_DIR}/app/Source/uiRenderer.cpp
+    ${PROJECT_SOURCE_DIR}/app/Source/Interface/todosComponent.cpp
+    ${PROJECT_SOURCE_DIR}/app/Source/Interface/milestonesComponent.cpp
+    ${PROJECT_SOURCE_DIR}/app/Source/Interface/diaryComponent.cpp
+    ${PROJECT_SOURCE_DIR}/app/Source/Interface/exitComponent.cpp
+    ${PROJECT_SOURCE_DIR}/app/Source/main.cpp
 )
 
 # Include directories
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/app/Include)
 
 target_link_libraries(log4daily
     PRIVATE ftxui::screen

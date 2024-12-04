@@ -1,13 +1,13 @@
-#include "applicationManager.h"
+#include "../Headers/applicationManager.h"
 
 #include <iostream>
 #include <string>
 #include <vector>
 
 // For handling user inputs
-#include "inputHandlers.h"
+#include "../Headers/inputHandlers.h"
 // For handling log4daily files
-#include "./Storage/localStorage.h"
+#include "../Headers/Storage/localStorage.h"
 
 ApplicationManager::ApplicationManager(std::string workingDirectory, std::string configPath) : localStorage(workingDirectory + configPath) {
     this->workingDirectory = workingDirectory;
@@ -93,6 +93,29 @@ CommandType ApplicationManager::run(int argc, char* argv[]) {
 
 void ApplicationManager::updateFileData(FileData data) {
     localStorage.updateDataToFile(workingDirectory, data.log4FileName, data);
+}
+
+void ApplicationManager::registerToday() {
+    time_t t = time(0);
+    struct tm * now = localtime(&t);
+    int year = now->tm_year + 1900;
+    int month = now->tm_mon + 1;
+    int day = now->tm_mday;
+    
+    Date today = Date({static_cast<short>(day), static_cast<short>(month), static_cast<short>(year), 0, 0});
+
+
+    bool exists = false;
+    for (const auto& date : openedFile.calendarData) {
+        if (date.day == today.day && date.month == today.month && date.year == today.year) {
+            exists = true;
+            break;
+        }
+    }
+    if (!exists) {
+        openedFile.calendarData.push_back(today);
+        localStorage.updateDataToFile(workingDirectory, openedFile.log4FileName, openedFile);
+    }
 }
 
 void ApplicationManager::showMessage(CommandType respond, std::string message) {

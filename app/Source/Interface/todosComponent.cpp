@@ -1,12 +1,12 @@
-#include "todosComponent.h"
+#include "../../Headers/Interface/todosComponent.h"
 
 #include <vector>
 #include <string>
 #include <algorithm>
 #include <iostream>
 
-#include "../Storage/localStorage.h"
-#include "../applicationManager.h"
+#include "../../Headers/Storage/localStorage.h"
+#include "../../Headers/applicationManager.h"
 
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/component_base.hpp"

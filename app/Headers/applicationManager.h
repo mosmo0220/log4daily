@@ -13,7 +13,7 @@
 #include <vector>
 
 // For handling user inputs
-#include "inputHandlers.h"
+#include "./inputHandlers.h"
 // For handling log4daily files
 #include "./Storage/localStorage.h"
 
@@ -48,6 +48,13 @@ public:
      * @param data The updated data to be saved to the log4daily file.
      */
     void updateFileData(FileData data);
+    /**
+     * @brief Registers the current date in the opened log4daily file.
+     * 
+     * This function registers the current date in the opened log4daily file.
+     * The current date is used to mark the date for diary entry.
+     */
+    void registerToday();
     /**
      * @brief Shows a message based on the command response.
      * 
