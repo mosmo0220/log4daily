@@ -9,8 +9,29 @@
 
 using namespace ftxui;
 
+DiaryData DiaryComponent::addDiaryEntry(FileData *data) {
+    auto t = std::time(nullptr);
+    auto tm = *std::localtime(&t);
+
+    Date today;
+    today.year = tm.tm_year + 1900;
+    today.month = tm.tm_mon + 1;
+    today.day = tm.tm_mday;
+    today.hour = 0;
+    today.minute = 0;
+
+    DiaryData newDiaryEntry;
+    newDiaryEntry.id = data->diaryData.size() + 1;
+    newDiaryEntry.date = today;
+    newDiaryEntry.diaryEntryName = newEntryName;
+    newDiaryEntry.diaryEntry = newEntryContent;
+
+    data->diaryData.push_back(newDiaryEntry);
+    return newDiaryEntry;
+}
+
 Component DiaryComponent::diaryComponent(FileData *data) {
-    std::vector<DiaryData> diary_entries = data->diaryData;
+    diary_entries = data->diaryData;
 
     std::vector<Date> diary_dates;
     for (DiaryData entry : diary_entries) {
@@ -22,7 +43,6 @@ Component DiaryComponent::diaryComponent(FileData *data) {
 
     Date today_date = Date(ltm->tm_mday, 1 + ltm->tm_mon, 1900 + ltm->tm_year, 0, 0);
 
-    std::vector<Date> diary_dates_combined;
     if (std::find(diary_dates.begin(), diary_dates.end(), today_date) == diary_dates.end()) {
         diary_dates_combined.push_back(today_date);
     }
@@ -38,6 +58,9 @@ Component DiaryComponent::diaryComponent(FileData *data) {
         return a.day > b.day;
     });
 
+    auto selected_index = std::make_shared<int>(0);
+    auto is_valid_diary = std::make_shared<int>(0);
+
     auto newEntryNameInput = Input(&newEntryName, "New Entry Name: ");
     auto newEntryContentInput = Input(&newEntryContent, "New Entry Content: ");
 
@@ -48,46 +71,91 @@ Component DiaryComponent::diaryComponent(FileData *data) {
         return date_string;
     };
 
-    auto selected_index = std::make_shared<int>(0);  // Use a shared pointer for reactivity
+    auto get_diary_from_date = [selected_index, this]() -> DiaryData {
+        if (*selected_index >= 0 && *selected_index < diary_dates_combined.size()) {
+            for (const auto& entry : diary_entries) {
+                if (entry.date == diary_dates_combined[*selected_index]) {
+                    return entry;
+                }
+            }
+        }
+        return DiaryData({-1, Date({0,0,0,0,0}), "", ""});
+    };
 
-    auto up_button = Button(">>", [selected_index] {
-        if (*selected_index > 0) {
-            (*selected_index)--;
+    auto addEntryButton = Button("Add Entry", [data, this, is_valid_diary, get_diary_from_date] {
+        if (!newEntryName.empty() && !newEntryContent.empty()) {
+            DiaryData addedEntry = addDiaryEntry(data);
+            diary_entries.push_back(addedEntry);
+            diary_dates_combined.push_back(addedEntry.date);
+            newEntryName.clear();
+            newEntryContent.clear();
+            *is_valid_diary = get_diary_from_date() == DiaryData({-1, Date({0,0,0,0,0}), "", ""}) ? 0 : 1;
         }
     });
 
-    auto down_button = Button("<<", [selected_index, diary_dates_combined] {
+    auto selected_diary_view_state_0 = ftxui::Container::Vertical({
+        ftxui::Renderer([] { return text("Add Today Entry:"); }),
+        newEntryNameInput,
+        newEntryContentInput,
+        addEntryButton
+    });
+
+    auto selected_diary_view_state_1 = ftxui::Container::Vertical({
+        Renderer([get_diary_from_date] {
+            auto diary = get_diary_from_date();
+            return hbox(
+                ftxui::text("Diary: "),
+                paragraph(diary.diaryEntryName)
+            );
+        }),
+        Renderer([get_diary_from_date] {
+            auto diary = get_diary_from_date();
+            return hbox(paragraph(diary.diaryEntry));
+        }),
+    });
+
+    *is_valid_diary = get_diary_from_date() == DiaryData({-1, Date({0,0,0,0,0}), "", ""}) ? 0 : 1;
+
+    auto selected_diary_view = ftxui::Container::Tab({
+        selected_diary_view_state_0,
+        selected_diary_view_state_1,
+    }, is_valid_diary.get());
+
+    auto up_button = Button(">>", [selected_index, this, is_valid_diary, get_diary_from_date] {
+        if (*selected_index > 0) {
+            (*selected_index)--;
+            *is_valid_diary = get_diary_from_date() == DiaryData({-1, Date({0,0,0,0,0}), "", ""}) ? 0 : 1;
+        }
+    });
+
+    auto down_button = Button("<<", [selected_index, this, is_valid_diary, get_diary_from_date] {
         if (*selected_index < diary_dates_combined.size() - 1) {
             (*selected_index)++;
+            *is_valid_diary = get_diary_from_date() == DiaryData({-1, Date({0,0,0,0,0}), "", ""}) ? 0 : 1;
         }
     });
 
     auto selected_date_view = ftxui::Container::Horizontal({
         down_button,
-        Renderer([date_to_string, diary_dates_combined, selected_index] { return text("  " + date_to_string(diary_dates_combined[*selected_index]) + "  "); }) | ftxui::center,
+        Renderer([date_to_string, this, selected_index] {
+            if (*selected_index >= 0 && *selected_index < diary_dates_combined.size()) {
+                return text("  " + date_to_string(diary_dates_combined[*selected_index]) + "  ");
+            }
+            return text("Invalid Date");
+        }) | ftxui::center,
         up_button,
-    }) | ftxui::center;
+    });
+
 
     auto container = Container::Vertical({
         ftxui::Renderer([] { return filler(); }),
         ftxui::Renderer([] { return ftxui::separatorEmpty(); }),
-        ftxui::Renderer([] { return ftxui::separatorEmpty(); }),
         ftxui::Container::Vertical({
             ftxui::Renderer([] { return filler(); }),
             selected_date_view,
-            Renderer([] {
-                return text("Today's Journal: Not set yet (in development)");
-            }),
+            selected_diary_view
         }) | ftxui::center | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 180),
         ftxui::Renderer([] { return ftxui::separatorEmpty(); }),
-        ftxui::Renderer([] { return ftxui::separatorEmpty(); }),
-        ftxui::Container::Vertical({
-            Renderer([] {
-                return text("Add Today Entry:");
-            }),
-            newEntryNameInput,
-            newEntryContentInput,
-        }) | ftxui::center | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 180),
         ftxui::Renderer([] { return filler(); }),
     }) | ftxui::size(ftxui::WIDTH, ftxui::EQUAL, 180) | ftxui::size(ftxui::HEIGHT, ftxui::EQUAL, 40);
 

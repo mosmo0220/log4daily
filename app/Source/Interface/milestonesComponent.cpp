@@ -155,7 +155,10 @@ Component MilestonesComponent::renderMilestonesComponent(FileData *data) {
         if (milestones.milestones.empty() || selectedMilestones >= static_cast<int>(milestones.milestones.size())) {
             return ftxui::text("Selected Milestone: No milestone is selected");
         }
-        return ftxui::text("Selected Milestone: " + milestones.milestones[selectedMilestones]);
+        return hbox(
+            ftxui::text("Selected Milestone: "),
+            paragraph(milestones.milestones[selectedMilestones])
+        );
     });
 
     auto selectedMilestoneDescription = Renderer([data, this] {
@@ -167,7 +170,10 @@ Component MilestonesComponent::renderMilestonesComponent(FileData *data) {
         if (description.empty()) {
             description = "Description: No description";
         }
-        return ftxui::text("Description: " + description);
+        return hbox(
+            ftxui::text("Description: "),
+            paragraph(description)
+        );
     });
 
     auto milestonesDisplay = ftxui::Renderer(milestonesList, [milestonesList, this] {

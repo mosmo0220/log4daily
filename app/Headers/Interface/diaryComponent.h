@@ -15,9 +15,12 @@ class DiaryComponent {
 public:
     DiaryComponent() {};
     Component diaryComponent(FileData *data);
+    DiaryData addDiaryEntry(FileData *data);
 private:
     std::string newEntryName;
     std::string newEntryContent;
+    std::vector<DiaryData> diary_entries;
+    std::vector<Date> diary_dates_combined;
 };
 
 #endif // DIARYCOMPONENT_H

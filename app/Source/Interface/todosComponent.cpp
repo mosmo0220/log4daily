@@ -217,7 +217,10 @@ ftxui::Component TodosComponent::renderTodosComponent(FileData *data) {
         if (todos.todos.empty() || selectedTodos >= static_cast<int>(todos.todos.size())) {
             return ftxui::text("Selected Todo: No todo is selected");
         }
-        return ftxui::text("Selected Todo: " + todos.todos[selectedTodos]);
+        return hbox(
+            ftxui::text("Selected Todo: "),
+            paragraph(todos.todos[selectedTodos])
+        );
     });
 
     auto selectedTodoDate = ftxui::Renderer([data, this] {
@@ -263,7 +266,11 @@ ftxui::Component TodosComponent::renderTodosComponent(FileData *data) {
         if (description.empty()) {
             description = "No description";
         }
-        return ftxui::text("Description: " + description);
+
+        return hbox(
+            ftxui::text("Description: "),
+            paragraph(description)
+        );
     });
 
     return ftxui::Container::Horizontal({
