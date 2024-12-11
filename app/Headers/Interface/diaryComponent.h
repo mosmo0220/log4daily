@@ -19,8 +19,8 @@ public:
 private:
     std::string newEntryName;
     std::string newEntryContent;
-    std::vector<DiaryData> diary_entries;
-    std::vector<Date> diary_dates_combined;
+    std::vector<DiaryData> diaryEntries;
+    std::vector<Date> combinedDiaryDates;
 };
 
 #endif // DIARYCOMPONENT_H

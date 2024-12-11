@@ -35,8 +35,8 @@ int main(int argc, char** argv) {
         
         int returnCode = 0;
         do {
-            returnCode = UI.renderUI();
-        } while (returnCode == 1);
+            returnCode = UI.renderUI(returnCode);
+        } while (returnCode != 0);
         return returnCode;
     }
     return 0;

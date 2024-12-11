@@ -15,7 +15,7 @@ using namespace ftxui;
 class uiRenderer {
     public:
         uiRenderer(ApplicationManager *_applicationManager);
-        int renderUI();
+        int renderUI(int isReload);
         void discardFileData();
         void saveFileData();
         void exit();
