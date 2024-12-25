@@ -17,9 +17,14 @@ std::string ManageConfig::getConfigFolderPath() {
 #elif __APPLE__
     configPath = "/Library/Application Support/log4daily";
 #else
+    const char* configDir = getenv("XDG_CONFIG_HOME");
     const char* homeDir = getenv("HOME");
-    if (homeDir != nullptr) {
-        configPath = std::string(homeDir) + "/.log4daily";
+    
+    if (configDir == nullptr && homeDir != nullptr) {
+        configPath = std::string(homeDir) + "/.config/log4daily";
+    }
+    else if (configDir != nullptr) {
+        configPath = std::string(configDir) + "/log4daily";
     } else {
         std::cerr << "Error getting user home directory" << std::endl;
         exit(1);
@@ -29,7 +34,7 @@ std::string ManageConfig::getConfigFolderPath() {
     return configPath;
 }
 
-ManageConfig::ConfigFolderStatus ManageConfig::createConfigFolder(const std::string& path) {
+ConfigFolderStatus ManageConfig::createConfigFolder(const std::string& path) {
     struct stat info;
 
     if (stat(path.c_str(), &info) != 0) {
@@ -47,7 +52,7 @@ ManageConfig::ConfigFolderStatus ManageConfig::createConfigFolder(const std::str
     }
 }
 
-std::string ManageConfig::prepareConfigFile() {
+ConfigFolderStatus ManageConfig::prepareConfigFile() {
     std::string configPath = getConfigFolderPath();
     ConfigFolderStatus status = createConfigFolder(configPath);
 
@@ -62,14 +67,5 @@ std::string ManageConfig::prepareConfigFile() {
         configFile.close();
     } 
 
-    switch (status) {
-        case ConfigFolderStatus::CREATED:
-        case ConfigFolderStatus::EXISTS:
-            return configPath;
-        case ConfigFolderStatus::ERROR:
-            return "Problem acured while creating config folder";
-            break;
-    }
-
-    return "Error!";
+    return status;
 }

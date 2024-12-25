@@ -101,7 +101,7 @@ int uiRenderer::renderUI(int isReload) {
                 text("Minimal width: " + std::to_string(screen.dimx()) + " / " + std::to_string(minWidth)),
                 text("Minimal height: " + std::to_string(screen.dimy()) + " / " + std::to_string(minHeight)),
                 separator(),
-                text("Expand the window to see the content."),
+                text("Move mouse over app or expand the window to see the content."),
             })) | border;
         }
         return vbox({

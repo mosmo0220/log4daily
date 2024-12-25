@@ -16,14 +16,13 @@
 #define MKDIR(path) mkdir(path, 0755)
 #endif
 
-class ManageConfig {
-
-enum class ConfigFolderStatus {
+enum ConfigFolderStatus {
     CREATED,
     EXISTS,
     ERROR
 };
 
+class ManageConfig {
 public:
     std::string configFileName = "configuration_log4daily.json";
     ManageConfig() {};
@@ -35,7 +34,7 @@ public:
      * 
      * @return std::string The path to the configuration folder.
      */
-    std::string prepareConfigFile();
+    ConfigFolderStatus prepareConfigFile();
     /**
      * @brief Gets the path to the configuration folder.
      * 

@@ -16,20 +16,26 @@
  */
 int main(int argc, char** argv) {
     ManageConfig manageConfig;
-    std::string configRespond = manageConfig.prepareConfigFile();
-    if (configRespond == "Problem acured while creating config folder" || configRespond == "Error!") {
-        std::cerr << configRespond << std::endl;
+    ConfigFolderStatus confingRespond = manageConfig.prepareConfigFile();
+
+    if (confingRespond == ConfigFolderStatus::CREATED) {
+        std::cerr << "Configuration folder created successfully" << std::endl;
+        return 1;
+    }
+
+    if (confingRespond == ConfigFolderStatus::ERROR) {
+        std::cerr << "Problem acured while creating config folder" << std::endl;
         return 1;
     }
     
-    ApplicationManager applicationManager(configRespond + "/", manageConfig.configFileName);
+    ApplicationManager applicationManager(manageConfig.getConfigFolderPath() + "/", manageConfig.configFileName);
     CommandType respond = applicationManager.run(argc, argv);
     
     std::string message = applicationManager.getRespondMessage().empty() ? "" : applicationManager.getRespondMessage();
     applicationManager.showMessage(respond, message);    
 
     if (respond == CommandType::New || respond == CommandType::Open) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         applicationManager.registerToday();
         uiRenderer UI(&applicationManager);
         
