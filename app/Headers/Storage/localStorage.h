@@ -14,6 +14,8 @@
 #include <fstream>
 #include <json.hpp>
 
+#include "manageConfig.h"
+
 /**
  * @struct Date
  * 
@@ -166,7 +168,8 @@ public:
     bool deleteLog4DailyFile(const std::string& folderPath, std::string& name, const std::string& configName);
 
 private:
-    nlohmann::json configJson;
+    Settings settings;
+	ManageConfig manageConfig;
 
     /**
      * @brief Checks if a file exists in the configuration.

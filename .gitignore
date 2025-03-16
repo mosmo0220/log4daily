@@ -37,5 +37,9 @@
 # vscode
 .vscode/*
 
+# vs
+/out/*
+.vs/*
+
 # Todo
 Todo.md

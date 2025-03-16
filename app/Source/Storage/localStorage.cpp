@@ -7,7 +7,12 @@
 
 LocalStorage::LocalStorage(const std::string& configPath) {
     std::ifstream configFile(configPath);
-    configFile >> configJson;
+
+	manageConfig = ManageConfig();
+	nlohmann::json configJson;
+	configFile >> configJson;
+
+    settings = manageConfig.JsonToSettings(configJson);
     configFile.close();
 }
 
@@ -70,14 +75,14 @@ bool LocalStorage::deleteLog4DailyFile(const std::string& folderPath, std::strin
 }
 
 bool LocalStorage::checkIfFileExists(const std::string& name) {
-    std::vector<std::string> files = configJson["listOfFilesNames"];
+    std::vector<std::string> files = settings.listOfFilesNames;
     return std::find(files.begin(), files.end(), name) != files.end();
 }
 
 bool LocalStorage::saveConfig(const std::string& folderPath, const std::string& configName) {
     try {
         std::ofstream configFile(folderPath + configName);
-        configFile << configJson.dump(4);
+        configFile << manageConfig.SettingsToJson(settings).dump(4);
         configFile.close();
     } catch (const std::exception& e) {
         return false;
@@ -87,7 +92,7 @@ bool LocalStorage::saveConfig(const std::string& folderPath, const std::string& 
 
 bool LocalStorage::addFileToConfig(std::string& name, const std::string& folderPath, const std::string& configName) {
     if (!checkIfFileExists(name)) {
-        configJson["listOfFilesNames"].push_back(name);
+        settings.listOfFilesNames.push_back(name);
         return saveConfig(folderPath, configName);
     }
     return false;
@@ -95,7 +100,7 @@ bool LocalStorage::addFileToConfig(std::string& name, const std::string& folderP
 
 bool LocalStorage::removeFileFromConfig(std::string& name, const std::string& folderPath, const std::string& configName) {
     if (checkIfFileExists(name)) {
-        configJson["listOfFilesNames"].erase(std::remove(configJson["listOfFilesNames"].begin(), configJson["listOfFilesNames"].end(), name), configJson["listOfFilesNames"].end());
+        settings.listOfFilesNames.erase(std::remove(settings.listOfFilesNames.begin(), settings.listOfFilesNames.end(), name), settings.listOfFilesNames.end());
         return saveConfig(folderPath, configName);
     }
     return false;

@@ -15,21 +15,33 @@
  * @return int The exit code of the application.
  */
 int main(int argc, char** argv) {
+#ifdef _DEBUG
+    bool create = true;
+    int argc_DEBUG = 3;
+	char* p0 = (char*)"log4daily";
+    char* p = (char*)(create ? "--new" : "--open");
+	char* p1 = (char*)"test";
+    char* argv_DEBUG[] = { p0, p, p1 };
+#endif
+    
     ManageConfig manageConfig;
-    ConfigFolderStatus confingRespond = manageConfig.prepareConfigFile();
+    ConfigFolderStatus configRespond = manageConfig.prepareConfigFile();
 
-    if (confingRespond == ConfigFolderStatus::CREATED) {
-        std::cerr << "Configuration folder created successfully" << std::endl;
-        return 1;
-    }
-
-    if (confingRespond == ConfigFolderStatus::ERROR) {
+    if (configRespond == ConfigFolderStatus::FOLDER_ERROR) {
         std::cerr << "Problem acured while creating config folder" << std::endl;
         return 1;
     }
+
+    if (configRespond == ConfigFolderStatus::FOLDER_CREATED) {
+        std::cout << "Configuration folder created successfully" << std::endl;
+    }
     
-    ApplicationManager applicationManager(manageConfig.getConfigFolderPath() + "/", manageConfig.configFileName);
+    ApplicationManager applicationManager(manageConfig.getSystemConfiguration().configPath + "/", manageConfig.configFileName);
+#ifdef _DEBUG
+    CommandType respond = applicationManager.run(argc_DEBUG, argv_DEBUG);
+#else
     CommandType respond = applicationManager.run(argc, argv);
+#endif
     
     std::string message = applicationManager.getRespondMessage().empty() ? "" : applicationManager.getRespondMessage();
     applicationManager.showMessage(respond, message);    

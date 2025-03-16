@@ -1,30 +1,43 @@
 #ifndef MANAGECONFIG_H
 #define MANAGECONFIG_H
 
-#include <iostream>
-#include <fstream>
-
-#include <sys/stat.h>
-#include <sys/types.h>
-
-#ifdef _WIN32
-#include <direct.h>
-#include <shlobj.h>
-#define MKDIR(path) _mkdir(path)
-#else
-#include <unistd.h>
-#define MKDIR(path) mkdir(path, 0755)
-#endif
+#include <string>
+#include <vector>
+#include <json.hpp>
 
 enum ConfigFolderStatus {
-    CREATED,
-    EXISTS,
-    ERROR
+    FOLDER_CREATED,
+    FOLDER_EXISTS,
+    FOLDER_ERROR
+};
+
+struct SystemConfiguration {
+	std::string system;
+	std::string systemLanguage;
+	std::string configPath;
+	std::string systemTheme;
+};
+
+enum class SupportedLanguages {
+	English,
+	Polish
+};
+
+enum class Themes {
+	Light,
+	Dark
+};
+
+struct Settings {
+	std::vector<std::string> listOfFilesNames;
+	SupportedLanguages selectedLanguage;
+	Themes selectedTheme;
+	SystemConfiguration readedSystemConfiguration;
 };
 
 class ManageConfig {
 public:
-    std::string configFileName = "configuration_log4daily.json";
+    std::string configFileName = "settings.json";
     ManageConfig() {};
     /**
      * @brief Manages the configuration for the log4daily application.
@@ -36,17 +49,26 @@ public:
      */
     ConfigFolderStatus prepareConfigFile();
     /**
-     * @brief Gets the path to the configuration folder.
+     * @brief Gets the path to the configuration folder, os name and language.
      * 
-     * This function gets the path to the configuration folder for the log4daily application.
+     * This function gets the path to the configuration folder, os name and language for the log4daily application.
      */
-    std::string getConfigFolderPath();
+    SystemConfiguration getSystemConfiguration();
     /**
      * @brief Creates the configuration folder.
      * 
      * This function creates the configuration folder for the log4daily application.
      */
     ConfigFolderStatus createConfigFolder(const std::string& path);
+	
+    nlohmann::json SystemConfigurationToJson(const SystemConfiguration& config);
+	SystemConfiguration JsonToSystemConfiguration(const nlohmann::json& j);
+	nlohmann::json SupportedLanguagesToJson(const SupportedLanguages& lang);
+	SupportedLanguages JsonToSupportedLanguages(const nlohmann::json& j);
+	nlohmann::json ThemesToJson(const Themes& theme);
+	Themes JsonToThemes(const nlohmann::json& j);
+	nlohmann::json SettingsToJson(const Settings& settings);
+	Settings JsonToSettings(const nlohmann::json& j);
 };
 
 #endif // MANAGECONFIG_H

@@ -31,7 +31,7 @@ uiRenderer::uiRenderer(ApplicationManager *_applicationManager) : inUseFileData(
 
 int uiRenderer::renderUI(int isReload) {
     int minHeight = 40;
-    int minWidth = 125;
+    int minWidth = 160;
 
     auto screen = ScreenInteractive::Fullscreen();
     screen_ptr = &screen;
