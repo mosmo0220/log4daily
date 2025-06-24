@@ -1,11 +1,11 @@
 #include "../../Headers/Interface/diaryComponent.h"
 
-#include "../../Headers/Storage/localStorage.h"
-
 #include <vector>
 #include <string>
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/screen_interactive.hpp"
+
+#include "../../l4dFiles/out/l4dFiles.hpp"
 
 using namespace ftxui;
 

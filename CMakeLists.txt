@@ -33,8 +33,6 @@ FetchContent_MakeAvailable(ftxui)
 # Add the executable
 add_executable(log4daily 
     ${PROJECT_SOURCE_DIR}/app/Source/inputHandlers.cpp
-    ${PROJECT_SOURCE_DIR}/app/Source/Storage/localStorage.cpp
-    ${PROJECT_SOURCE_DIR}/app/Source/Storage/manageConfig.cpp
     ${PROJECT_SOURCE_DIR}/app/Source/applicationManager.cpp
     ${PROJECT_SOURCE_DIR}/app/Source/uiRenderer.cpp
     ${PROJECT_SOURCE_DIR}/app/Source/Interface/todosComponent.cpp
@@ -44,8 +42,9 @@ add_executable(log4daily
     ${PROJECT_SOURCE_DIR}/app/Source/main.cpp
 )
 
-# Include directories
-include_directories(${PROJECT_SOURCE_DIR}/app/Libs)
+target_link_libraries(log4daily
+    PRIVATE ${PROJECT_SOURCE_DIR}/app/l4dFiles/out/l4dFiles.a
+)
 
 target_link_libraries(log4daily
     PRIVATE ftxui::screen

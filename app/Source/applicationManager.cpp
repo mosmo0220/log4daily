@@ -6,8 +6,8 @@
 
 // For handling user inputs
 #include "../Headers/inputHandlers.h"
-// For handling log4daily files
-#include "../Headers/Storage/localStorage.h"
+
+#include "../l4dFiles/out/l4dFiles.hpp"
 
 ApplicationManager::ApplicationManager(std::string workingDirectory, std::string configPath) : localStorage(workingDirectory + configPath) {
     this->workingDirectory = workingDirectory;

@@ -4,8 +4,9 @@
 #include <string>
 
 // Log4daily components
-#include "./Storage/localStorage.h"
 #include "./applicationManager.h"
+
+#include "../l4dFiles/out/l4dFiles.hpp"
 
 // FTXUI component
 #include "ftxui/component/component.hpp"

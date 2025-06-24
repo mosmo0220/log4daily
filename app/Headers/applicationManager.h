@@ -14,8 +14,8 @@
 
 // For handling user inputs
 #include "./inputHandlers.h"
-// For handling log4daily files
-#include "./Storage/localStorage.h"
+
+#include "../l4dFiles/out/l4dFiles.hpp"
 
 enum class CommandType {
     New,

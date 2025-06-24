@@ -6,8 +6,9 @@
 #include <functional>
 
 // Log4daily components
-#include "../Headers/Storage/localStorage.h"
 #include "../Headers/applicationManager.h"
+
+#include "../l4dFiles/out/l4dFiles.hpp"
 
 // FTXUI components
 #include "ftxui/component/captured_mouse.hpp"

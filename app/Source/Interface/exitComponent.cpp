@@ -1,7 +1,7 @@
 #include "../../Headers/Interface/exitComponent.h"
 
 #include "../../Headers/applicationManager.h"
-#include "../../Headers/Storage/localStorage.h"
+#include "../../l4dFiles/out/l4dFiles.hpp"
 #include "../../Headers/uiRenderer.h"
 
 #include "ftxui/component/component.hpp"

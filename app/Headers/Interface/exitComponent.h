@@ -2,7 +2,7 @@
 #define EXITCOMPONENT_H
 
 #include "../applicationManager.h"
-#include "../Storage/localStorage.h"
+#include "../../l4dFiles/out/l4dFiles.hpp"
 #include "../uiRenderer.h"
 
 #include "ftxui/component/component.hpp"
