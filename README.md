@@ -1,19 +1,19 @@
 
 ### README.md
 
-# log4daily
+# log4daily-TUI
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2baaf677039f4b95983f88b785010447)](https://app.codacy.com/gh/mosmo0220/log4daily/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 ## Project Overview 📖
 
-**log4daily** is a work-in-progress application with the goal of providing a robust platform for task planning, milestone tracking, and journaling. The application aims to leverage AI for insightful analysis and reporting, helping users stay organized, track progress, and gain valuable insights into their daily activities and accomplishments.
+**log4daily-TUI** is a work-in-progress application with the goal of providing a robust platform for task planning, milestone tracking, and journaling. The application aims to leverage AI for insightful analysis and reporting, helping users stay organized, track progress, and gain valuable insights into their daily activities and accomplishments.
 
 **Please note:** This application is still under development, and the features outlined above are intended goals rather than completed functionalities.
 
 ### Installation 📥
 
-To install **log4daily**, follow these steps:
+To install **log4daily-TUI**, follow these steps:
 
 1. **Clone the repository:**
     ```sh
@@ -41,7 +41,7 @@ To install **log4daily**, follow these steps:
 This script will make binary file, copy it to app folder and add to console path
 
  ### Update 🔄
-To update **log4daily** to the latest version, follow these steps:
+To update **log4daily-TUI** to the latest version, follow these steps:
 
 1. **Navigate to the project directory:**
     ```sh
@@ -58,7 +58,7 @@ To update **log4daily** to the latest version, follow these steps:
     ./install.sh
     ```
 
-This will update your local copy of **log4daily** with the latest changes and ensure that everything is set up correctly.
+This will update your local copy of **log4daily-TUI** with the latest changes and ensure that everything is set up correctly.
 
 ### Project Structure 🗂️
 
@@ -73,7 +73,7 @@ This project is licensed under the **GNU Affero General Public License v3 (AGPL-
 ### Used libraries 📦
 
 - [**FTXUI**](https://github.com/ArthurSonzogni/FTXUI) for UI : License MIT
-- [**nlohmann-json**](https://github.com/nlohmann/json) for json serialization : License MIT
+- [**l4dFiles**](https://github.com/mosmo0220/l4dFiles) for managing l4d files : License MIT
 
 ### Author 👤
 
