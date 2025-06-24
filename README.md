@@ -7,7 +7,7 @@
 
 ## Project Overview 📖
 
-**log4daily-TUI** is a work-in-progress application with the goal of providing a robust platform for task planning, milestone tracking, and journaling. The application aims to leverage AI for insightful analysis and reporting, helping users stay organized, track progress, and gain valuable insights into their daily activities and accomplishments.
+**log4daily-TUI** is a work-in-progress application with the goal of providing a robust platform for task planning, milestone tracking, and journaling. 
 
 **Please note:** This application is still under development, and the features outlined above are intended goals rather than completed functionalities.
 
