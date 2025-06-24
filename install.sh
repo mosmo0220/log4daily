@@ -11,6 +11,15 @@ then
     exit 1
 fi
 
+if ! command -v python3 &> /dev/null
+then
+    echo "python3 could not be found, please install it first."
+    exit 1
+fi
+
+# Run l4dFiles make
+python3 ./l4dFiles/make.py
+
 # Run cmake and compile the application
 cmake ..
 make
