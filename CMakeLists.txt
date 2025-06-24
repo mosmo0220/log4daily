@@ -43,7 +43,7 @@ add_executable(log4daily
 )
 
 target_link_libraries(log4daily
-    PRIVATE ${PROJECT_SOURCE_DIR}/app/l4dFiles/out/l4dFiles.a
+    PRIVATE ${PROJECT_SOURCE_DIR}/l4dFiles/out/l4dFiles.a
 )
 
 target_link_libraries(log4daily

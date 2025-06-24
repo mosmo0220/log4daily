@@ -6,7 +6,7 @@
 // Log4daily components
 #include "./applicationManager.h"
 
-#include "../l4dFiles/out/l4dFiles.hpp"
+#include "../../l4dFiles/out/l4dFiles.hpp"
 
 // FTXUI component
 #include "ftxui/component/component.hpp"

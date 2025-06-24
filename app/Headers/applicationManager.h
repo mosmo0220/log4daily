@@ -15,7 +15,7 @@
 // For handling user inputs
 #include "./inputHandlers.h"
 
-#include "../l4dFiles/out/l4dFiles.hpp"
+#include "../../l4dFiles/out/l4dFiles.hpp"
 
 enum class CommandType {
     New,

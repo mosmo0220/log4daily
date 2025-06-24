@@ -7,7 +7,7 @@
 // For handling user inputs
 #include "../Headers/inputHandlers.h"
 
-#include "../l4dFiles/out/l4dFiles.hpp"
+#include "../../l4dFiles/out/l4dFiles.hpp"
 
 ApplicationManager::ApplicationManager(std::string workingDirectory, std::string configPath) : localStorage(workingDirectory + configPath) {
     this->workingDirectory = workingDirectory;

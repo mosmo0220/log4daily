@@ -7,7 +7,7 @@
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 
-#include "../../l4dFiles/out/l4dFiles.hpp"
+#include "../../../l4dFiles/out/l4dFiles.hpp"
 
 using namespace ftxui;
 
